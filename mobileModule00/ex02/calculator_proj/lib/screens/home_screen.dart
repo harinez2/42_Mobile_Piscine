@@ -39,10 +39,10 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () {}, child: const Text('9'))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('C'))),
+                            onPressed: () {}, child: const Text('C', style: TextStyle(color: Colors.red,)))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('AC'))),
+                            onPressed: () {}, child: const Text('AC', style: TextStyle(color: Colors.red,)))),
                   ],
                 ),
                 Row(
@@ -58,10 +58,10 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () {}, child: const Text('6'))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('+'))),
+                            onPressed: () {}, child: const Text('+', style: TextStyle(color: Colors.white,)))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('-'))),
+                            onPressed: () {}, child: const Text('-', style: TextStyle(color: Colors.white,)))),
                   ],
                 ),
                 Row(
@@ -77,10 +77,10 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () {}, child: const Text('3'))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('x'))),
+                            onPressed: () {}, child: const Text('x', style: TextStyle(color: Colors.white,)))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('/'))),
+                            onPressed: () {}, child: const Text('/', style: TextStyle(color: Colors.white,)))),
                   ],
                 ),
                 Row(
@@ -96,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () {}, child: const Text('00'))),
                     Expanded(
                         child: TextButton(
-                            onPressed: () {}, child: const Text('='))),
+                            onPressed: () {}, child: const Text('=', style: TextStyle(color: Colors.white,)))),
                     Expanded(
                         child: TextButton(
                             onPressed: () {}, child: const Text(' '))),

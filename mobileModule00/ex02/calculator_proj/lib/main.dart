@@ -11,9 +11,18 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.blue),
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.light(
+          primary: Colors.blueGrey,
+          background: Colors.blueGrey.shade800,
+        ),
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: Colors.blueGrey),
+        ),
       ),
+      // theme: ThemeData(
+      //   appBarTheme: const AppBarTheme(backgroundColor: Colors.blue),
+      // ),
       home: Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('Calculator')),
