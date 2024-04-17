@@ -14,10 +14,16 @@ class HomeScreen extends StatelessWidget {
                 TextField(
                   textAlign: TextAlign.right,
                   controller: TextEditingController(text: '0'),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
                 ),
                 TextField(
                   textAlign: TextAlign.right,
                   controller: TextEditingController(text: '0'),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
                 ),
               ],
             ),
