@@ -1,10 +1,14 @@
+import 'package:calculator_proj/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var formula = context.watch<MainAppState>().formula;
+    var answer = context.watch<MainAppState>().answer;
     return Center(
       child: Column(
         children: [
@@ -13,14 +17,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 TextField(
                   textAlign: TextAlign.right,
-                  controller: TextEditingController(text: '0'),
+                  controller: TextEditingController(text: formula),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
                 ),
                 TextField(
                   textAlign: TextAlign.right,
-                  controller: TextEditingController(text: '0'),
+                  controller: TextEditingController(text: answer),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
@@ -117,10 +121,12 @@ class CalcButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MainAppState>();
     return Expanded(
       child: TextButton(
         onPressed: () {
           print('Button pressed: $buttonName');
+          appState.setValue(buttonName);
         },
         style: TextButton.styleFrom(
           backgroundColor: Colors.blueGrey,
