@@ -116,9 +116,17 @@ class CalcButton extends StatelessWidget {
         onPressed: () {
           print('Button pressed: $buttonName');
         },
-        child: Text(
-          buttonName,
-          style: textStyle,
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.blueGrey,
+          foregroundColor: Colors.black,
+          shape: const BeveledRectangleBorder(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            buttonName,
+            style: textStyle,
+          ),
         ),
       ),
     );
