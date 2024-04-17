@@ -7,7 +7,7 @@ void main() {
 }
 
 class MainAppState extends ChangeNotifier {
-  final numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '00',];
+  final numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '00', '.'];
   final operators = ['+', '-', 'x', '/',];
   var formula = '0';
   var answer = '0';
@@ -39,9 +39,15 @@ class MainAppState extends ChangeNotifier {
       // }
     } else if (op == '=') {
       // =
-
+      answer = Calculate.calc(formula);
     }
     notifyListeners();
+  }
+}
+
+class Calculate {
+  static String calc(dynamic formula) {
+    return '1';
   }
 }
 
