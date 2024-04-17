@@ -125,7 +125,7 @@ class CalcButton extends StatelessWidget {
     return Expanded(
       child: TextButton(
         onPressed: () {
-          print('Button pressed: $buttonName');
+          // print('Button pressed: $buttonName');
           appState.setValue(buttonName);
         },
         style: TextButton.styleFrom(

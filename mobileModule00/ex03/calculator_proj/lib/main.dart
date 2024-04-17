@@ -7,22 +7,40 @@ void main() {
 }
 
 class MainAppState extends ChangeNotifier {
+  final numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '00',];
+  final operators = ['+', '-', 'x', '/',];
   var formula = '0';
   var answer = '0';
 
   void setValue(String op) {
-    if (op == 'AC' || op == 'C') {
-      // C, AC
+    if (op == 'AC') {
+      // AC
       formula = '0';
       answer = '0';
-    } else {
-      // numbers, operators
-      if (formula == '0') {
-        formula = '';
+    } else if (op == 'C') {
+      // C
+      formula = formula.substring(0, formula.length - 1);
+      if (formula.isEmpty) {
+        formula = '0';
       }
-      formula += op;
-    }
+    } else if (numbers.contains(op)) {
+      // numbers
+      if (formula != '0') {
+        formula += op;
+      } else if (op != '0' && op != '00') {
+        formula = op;
+      }
+    } else if (operators.contains(op)) {
+      // operators
+      // if (operators.contains(formula[formula.length - 1])) {
+      //   formula = formula.substring(0, formula.length - 1) + op;
+      // } else {
+        formula += op;
+      // }
+    } else if (op == '=') {
+      // =
 
+    }
     notifyListeners();
   }
 }
