@@ -22,90 +22,104 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          Align(
+          const Align(
             alignment: Alignment.bottomCenter,
             child: Column(
               children: [
                 Row(
                   children: [
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('7'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('8'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('9'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('C', style: TextStyle(color: Colors.red,)))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('AC', style: TextStyle(color: Colors.red,)))),
+                    CalcButton(buttonName: '7'),
+                    CalcButton(buttonName: '8'),
+                    CalcButton(buttonName: '9'),
+                    CalcButton(
+                        buttonName: 'C',
+                        textStyle: TextStyle(
+                          color: Colors.red,
+                        )),
+                    CalcButton(
+                        buttonName: 'AC',
+                        textStyle: TextStyle(
+                          color: Colors.red,
+                        )),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('4'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('5'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('6'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('+', style: TextStyle(color: Colors.white,)))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('-', style: TextStyle(color: Colors.white,)))),
+                    CalcButton(buttonName: '4'),
+                    CalcButton(buttonName: '5'),
+                    CalcButton(buttonName: '6'),
+                    CalcButton(
+                        buttonName: '+',
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )),
+                    CalcButton(
+                        buttonName: '-',
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('1'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('2'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('3'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('x', style: TextStyle(color: Colors.white,)))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('/', style: TextStyle(color: Colors.white,)))),
+                    CalcButton(buttonName: '1'),
+                    CalcButton(buttonName: '2'),
+                    CalcButton(buttonName: '3'),
+                    CalcButton(
+                        buttonName: 'x',
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )),
+                    CalcButton(
+                        buttonName: '/',
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('0'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('.'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('00'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text('=', style: TextStyle(color: Colors.white,)))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {}, child: const Text(' '))),
+                    CalcButton(buttonName: '0'),
+                    CalcButton(buttonName: '.'),
+                    CalcButton(buttonName: '00'),
+                    CalcButton(
+                        buttonName: '=',
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )),
+                    CalcButton(buttonName: ' '),
                   ],
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CalcButton extends StatelessWidget {
+  final String buttonName;
+  final TextStyle textStyle;
+
+  const CalcButton({
+    super.key,
+    required this.buttonName,
+    this.textStyle = const TextStyle(),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: TextButton(
+        onPressed: () {
+          print('Button pressed: $buttonName');
+        },
+        child: Text(
+          buttonName,
+          style: textStyle,
+        ),
       ),
     );
   }
