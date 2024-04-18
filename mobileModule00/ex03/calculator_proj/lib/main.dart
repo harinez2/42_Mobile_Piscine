@@ -56,7 +56,7 @@ class Calculate {
     List<String> operatorList = [' '];
     List<double> numberList = [];
     int currentIdx = 0;
-    double multiply = 10;
+    double decimal = 0;
 
     // 数式を配列に格納する
     int i = 0;
@@ -64,7 +64,7 @@ class Calculate {
       if (operators.contains(formula[i])) {
         // オペレータの場合：
         // リセット
-        multiply = 10;
+        decimal = 0;
         currentIdx++;
         // 先頭に*/があるのは不正
         if (i == 0 && (formula[i] == '*' || formula[i] == '/')) {
@@ -83,12 +83,18 @@ class Calculate {
           numberList.add(0);
         }
         if (formula[i] == '.') {
-          multiply = 0.1;
+          decimal = 0.1;
         } else {
-          numberList[currentIdx] =
-              numberList[currentIdx] * multiply + double.parse(formula[i]);
+          if (decimal == 0) {
+            // 整数部
+            numberList[currentIdx] =
+                numberList[currentIdx] * 10 + double.parse(formula[i]);
+          } else {
+            // 小数部
+            numberList[currentIdx] += double.parse(formula[i]) * decimal;
+            decimal /= 10;
+          }
         }
-        operators.add('+');
       }
       i++;
     }
@@ -103,40 +109,57 @@ class Calculate {
     }
 
     // 計算する
-    // double leftNum = 0;
-    // double rightNum = 0;
-    // var operator = '';
-    // var i = 0;
-    // while (i < formula.length) {
-    //   if (numbers.contains(formula[i])) {
-    //     if (formula[i] == '.') {
-    //       multiply = 0.1;
-    //     } else {
-    //       rightNum = rightNum * multiply + double.parse(formula[i]);
+    while (1 < numberList.length) {
+      // x/を検索
+      var pos = -1;
+      try {
+        pos = operatorList.indexOf(operatorList
+            .firstWhere((element) => (element == 'x' || element == '/')));
+      } catch (e) {
+        // x/が見つからない場合は例外を無視
+      }
+      print('*/pos:$pos');
+      // x/が見つかった場合、計算する
+      if (pos != -1) {
+        try {
+          if (operatorList[pos] == 'x') {
+            numberList[pos - 1] *= numberList[pos];
+          } else {
+            numberList[pos - 1] /= numberList[pos];
+          }
+          operatorList.removeAt(pos);
+          numberList.removeAt(pos);
+        } catch (e) {
+          // 計算に問題があった場合は、エラーをそのまま画面に出す
+          return e;
+        }
+        continue;
+      }
 
-    //       // if the end of a number
-    //       if (i + 1 < formula.length && operator.contains(formula[i + 1]) ||
-    //           i + 1 == formula.length) {
-    //         if (operator == '+') {
-    //           leftNum += rightNum;
-    //         } else if (operator == '-') {
-    //           leftNum -= rightNum;
-    //         } else if (operator == 'x') {
-    //           leftNum *= rightNum;
-    //         } else if (operator == '/') {
-    //           leftNum /= rightNum;
-    //         }
-    //         rightNum = 0;
-    //         operator = '';
-    //         multiply = 10;
-    //       }
-    //     }
-    //   } else if (operators.contains(formula[i]) &&
-    //       (i + 1 < formula.length && !operators.contains(formula[i + 1]))) {
-    //     operator = formula[i];
-    //   }
-    //   i++;
-    // }
+      // +-を検索
+      try {
+        pos = operatorList.indexOf(operatorList
+            .firstWhere((element) => (element == '+' || element == '-')));
+      } catch (e) {
+        // +-が見つからない場合は例外を無視
+      }
+      print('+-pos:$pos');
+      // x/が見つかった場合、計算する
+      if (pos != -1) {
+        try {
+          if (operatorList[pos] == '+') {
+            numberList[pos - 1] += numberList[pos];
+          } else {
+            numberList[pos - 1] -= numberList[pos];
+          }
+          operatorList.removeAt(pos);
+          numberList.removeAt(pos);
+        } catch (e) {
+          // 計算に問題があった場合は、エラーをそのまま画面に出す
+          return e;
+        }
+      }
+    }
     return numberList[0];
   }
 }
