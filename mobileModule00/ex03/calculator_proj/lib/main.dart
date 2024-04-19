@@ -57,6 +57,7 @@ class Calculate {
     List<double> numberList = [];
     int currentIdx = 0;
     double decimal = 0;
+    bool isMinus = false;
 
     // 数式を配列に格納する
     int i = 0;
@@ -66,19 +67,20 @@ class Calculate {
         // リセット
         decimal = 0;
         currentIdx++;
-        // 先頭に*/があるのは不正
-        if (i == 0 && (formula[i] == '*' || formula[i] == '/')) {
-          break;
-        }
-        // オペレータが連続し、2個目が*/がある場合は不正
-        if (operatorList.length == currentIdx + 1 &&
-            (formula[i] == '*' || formula[i] == '/')) {
-          break;
+        isMinus = false;
+        // オペレータの順番が不正
+        if (operatorList.length != numberList.length) {
+          // オペレータが連続し、2個目が*/がある場合のみ不正
+          if (formula[i] == '*' || formula[i] == '/') {
+            return 'Too much operators';
+          } else if (formula[i] == '-') {
+            isMinus = true;
+          }
         }
         operatorList.add(formula[i]);
       } else if (numbers.contains(formula[i])) {
         // 数値の場合：
-        // 数字の最初の位置文字目の場合、リストに0を追加する
+        // 数字の最初の1文字目の場合、リストに0を追加する
         if (numberList.length == currentIdx) {
           numberList.add(0);
         }
@@ -89,6 +91,10 @@ class Calculate {
             // 整数部
             numberList[currentIdx] =
                 numberList[currentIdx] * 10 + double.parse(formula[i]);
+            if (isMinus) {
+              numberList[currentIdx] *= -1;
+              isMinus = false;
+            }
           } else {
             // 小数部
             numberList[currentIdx] += double.parse(formula[i]) * decimal;
@@ -118,7 +124,6 @@ class Calculate {
       } catch (e) {
         // x/が見つからない場合は例外を無視
       }
-      print('*/pos:$pos');
       // x/が見つかった場合、計算する
       if (pos != -1) {
         try {
@@ -143,7 +148,6 @@ class Calculate {
       } catch (e) {
         // +-が見つからない場合は例外を無視
       }
-      print('+-pos:$pos');
       // x/が見つかった場合、計算する
       if (pos != -1) {
         try {
