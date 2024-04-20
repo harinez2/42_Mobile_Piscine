@@ -15,20 +15,22 @@ class MainApp extends StatelessWidget {
           // 左側のアイコン
           leading: const Icon(Icons.search),
           // タイトルテキスト
-          title: const Text('Hello'),
+          title: TextField(
+            textAlign: TextAlign.left,
+            controller: TextEditingController(text: 'Search location...'),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+            ),
+          ),
           // 右側のアイコン一覧
           actions: <Widget>[
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.favorite),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.assistant_navigation),
             ),
           ],
         ),
-        body:const Center(
+        body: const Center(
           child: Text('Hello World!'),
         ),
       ),
