@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/home_screen.dart';
@@ -66,18 +64,20 @@ class Calculate {
         // オペレータの場合：
         // リセット
         decimal = 0;
-        currentIdx++;
         isMinus = false;
         // オペレータの順番が不正
         if (operatorList.length != numberList.length) {
           // オペレータが連続し、2個目が*/がある場合のみ不正
-          if (formula[i] == '*' || formula[i] == '/') {
+          if (formula[i] == 'x' || formula[i] == '/') {
             return 'Too much operators';
           } else if (formula[i] == '-') {
             isMinus = true;
           }
+        } else {
+          // 1つ目のオペレータの場合、リストに追加
+          operatorList.add(formula[i]);
+          currentIdx++;
         }
-        operatorList.add(formula[i]);
       } else if (numbers.contains(formula[i])) {
         // 数値の場合：
         // 数字の最初の1文字目の場合、リストに0を追加する
@@ -104,14 +104,14 @@ class Calculate {
       }
       i++;
     }
-    if (i != formula.length || operatorList.length != numberList.length) {
-      //数式不正
-      return 'Invalid formula';
-    }
     if (true) {
       // debug
       print(operatorList);
       print(numberList);
+    }
+    if (i != formula.length || operatorList.length != numberList.length) {
+      //数式不正
+      return 'Invalid formula';
     }
 
     // 計算する
