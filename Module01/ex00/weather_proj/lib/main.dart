@@ -16,6 +16,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
+  final PageController _pageController = PageController(initialPage: 0);
 
   static const List<Widget> _widgetOptions = <Widget>[
     CurrentlyTab(),
@@ -23,9 +24,18 @@ class _MainAppState extends State<MainApp> {
     WeeklyTab(),
   ];
 
-  void _onItemTapped(int index) {
+  void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(_selectedIndex,
+          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    });
+  }
+
+  void _onDestinationSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.jumpToPage(_selectedIndex);
     });
   }
 
@@ -52,11 +62,15 @@ class _MainAppState extends State<MainApp> {
             ),
           ],
         ),
-        body: _widgetOptions.elementAt(_selectedIndex),
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          children: _widgetOptions,
+        ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _selectedIndex,
-          onDestinationSelected: _onItemTapped,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          onDestinationSelected: _onDestinationSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: const <NavigationDestination>[
             NavigationDestination(icon: Icon(Icons.home), label: 'Currently'),
             NavigationDestination(icon: Icon(Icons.home), label: 'Today'),
