@@ -44,6 +44,7 @@ class MainAppState extends State<MainApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           // 左側のアイコン
           leading: const Icon(Icons.search),
           // タイトルテキスト
@@ -56,6 +57,12 @@ class MainAppState extends State<MainApp> {
           ),
           // 右側のアイコン一覧
           actions: <Widget>[
+            VerticalDivider(
+              color: Colors.blueGrey.shade300,
+              thickness: 2,
+              indent: 10,
+              endIndent: 10,
+            ),
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.assistant_navigation),
