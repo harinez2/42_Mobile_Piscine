@@ -50,9 +50,10 @@ class MainAppState extends State<MainApp> {
           // タイトルテキスト
           title: TextField(
             textAlign: TextAlign.left,
-            controller: TextEditingController(text: 'Search location...'),
+            controller: TextEditingController(),
             decoration: const InputDecoration(
               border: InputBorder.none,
+              labelText: 'Search location...',
             ),
           ),
           // 右側のアイコン一覧
