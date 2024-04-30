@@ -11,10 +11,10 @@ class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
-  _MainAppState createState() => _MainAppState();
+  MainAppState createState() => MainAppState();
 }
 
-class _MainAppState extends State<MainApp> {
+class MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
@@ -72,9 +72,11 @@ class _MainAppState extends State<MainApp> {
           onDestinationSelected: _onDestinationSelected,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: const <NavigationDestination>[
-            NavigationDestination(icon: Icon(Icons.home), label: 'Currently'),
-            NavigationDestination(icon: Icon(Icons.home), label: 'Today'),
-            NavigationDestination(icon: Icon(Icons.home), label: 'Weekly'),
+            NavigationDestination(
+                icon: Icon(Icons.settings), label: 'Currently'),
+            NavigationDestination(icon: Icon(Icons.event), label: 'Today'),
+            NavigationDestination(
+                icon: Icon(Icons.date_range), label: 'Weekly'),
           ],
         ),
       ),
