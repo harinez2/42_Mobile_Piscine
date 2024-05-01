@@ -85,7 +85,11 @@ class MainAppState extends State<MainApp> {
               endIndent: 10,
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _onChangeText('Geolocation');
+                });
+              },
               icon: const Icon(Icons.assistant_navigation),
             ),
           ],
