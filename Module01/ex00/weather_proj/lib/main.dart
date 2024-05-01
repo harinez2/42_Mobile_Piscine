@@ -20,9 +20,9 @@ class MainAppState extends State<MainApp> {
   final PageController _pageController = PageController(initialPage: 0);
 
   late List<Widget> _widgetOptions = <Widget>[
-    const CurrentlyTab(displayText: ''),
-    const TodayTab(displayText: ''),
-    const WeeklyTab(displayText: ''),
+    const CurrentlyTab(),
+    const TodayTab(),
+    const WeeklyTab(),
   ];
 
   @override
