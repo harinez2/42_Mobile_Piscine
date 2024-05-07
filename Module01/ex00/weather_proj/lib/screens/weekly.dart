@@ -1,27 +1,12 @@
 import 'package:flutter/material.dart';
 
-class WeeklyTab extends StatefulWidget {
-  final String displayText;
+class WeeklyTab extends StatelessWidget {
+  const WeeklyTab({super.key});
 
-  const WeeklyTab({
-    super.key,
-    this.displayText = '',
-  });
-
-  @override
-  WeeklyTabState createState() => WeeklyTabState();
-}
-
-class WeeklyTabState extends State<WeeklyTab> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          'Weekly\n${widget.displayText}',
-          textAlign: TextAlign.center,
-        ),
-      ),
+    return const Scaffold(
+      body: Center(child: Text('Weekly tab')),
     );
   }
 }

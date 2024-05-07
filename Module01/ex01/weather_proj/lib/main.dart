@@ -16,13 +16,28 @@ class MainApp extends StatefulWidget {
 
 class MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
+  late TextEditingController _textEditingController;
   final PageController _pageController = PageController(initialPage: 0);
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    CurrentlyTab(),
-    TodayTab(),
-    WeeklyTab(),
+  late List<Widget> _widgetOptions = <Widget>[
+    const CurrentlyTab(),
+    const TodayTab(),
+    const WeeklyTab(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+  }
+
+  void _onChangeText(String text) {
+    _widgetOptions = <Widget>[
+      CurrentlyTab(displayText: text),
+      TodayTab(displayText: text),
+      WeeklyTab(displayText: text),
+    ];
+  }
 
   void _onPageChanged(int index) {
     setState(() {
@@ -50,7 +65,12 @@ class MainAppState extends State<MainApp> {
           // タイトルテキスト
           title: TextField(
             textAlign: TextAlign.left,
-            controller: TextEditingController(),
+            controller: _textEditingController,
+            onChanged: (text) {
+              setState(() {
+                _onChangeText(text);
+              });
+            },
             decoration: const InputDecoration(
               border: InputBorder.none,
               labelText: 'Search location...',
@@ -65,7 +85,11 @@ class MainAppState extends State<MainApp> {
               endIndent: 10,
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _onChangeText('Geolocation');
+                });
+              },
               icon: const Icon(Icons.assistant_navigation),
             ),
           ],
