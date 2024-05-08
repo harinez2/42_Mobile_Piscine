@@ -4,6 +4,7 @@ import 'screens/currently.dart';
 import 'screens/today.dart';
 import 'screens/weekly.dart';
 import 'components/geolocator.dart';
+import 'components/geocoding_api.dart';
 
 void main() {
   runApp(const MainApp());
@@ -98,6 +99,8 @@ class MainAppState extends State<MainApp> {
             IconButton(
               onPressed: () async {
                 try {
+                  GeoCoding ret = await fetchGeoCoding('tokyo');
+                  print(ret);
                   Position position = await GeoLocator.determinePosition();
                   setState(() {
                     _onChangeText(
