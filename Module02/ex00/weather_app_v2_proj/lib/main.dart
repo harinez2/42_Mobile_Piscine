@@ -32,11 +32,20 @@ class MainAppState extends State<MainApp> {
     _textEditingController = TextEditingController();
   }
 
-  void _onChangeText(String text) {
+  void _onChangeText({String displayText = '', String? errorText}) {
     _widgetOptions = <Widget>[
-      CurrentlyTab(displayText: text),
-      TodayTab(displayText: text),
-      WeeklyTab(displayText: text),
+      CurrentlyTab(
+        displayText: displayText,
+        errorText: errorText,
+      ),
+      TodayTab(
+        displayText: displayText,
+        errorText: errorText,
+      ),
+      WeeklyTab(
+        displayText: displayText,
+        errorText: errorText,
+      ),
     ];
   }
 
@@ -69,7 +78,7 @@ class MainAppState extends State<MainApp> {
             controller: _textEditingController,
             onChanged: (text) {
               setState(() {
-                _onChangeText(text);
+                _onChangeText(displayText: text);
               });
             },
             decoration: const InputDecoration(
@@ -87,9 +96,10 @@ class MainAppState extends State<MainApp> {
             ),
             IconButton(
               onPressed: () async {
-                Position position = await _determinePosition();
-                setState(() {
-                  _onChangeText('''
+                try {
+                  Position position = await _determinePosition();
+                  setState(() {
+                    _onChangeText(displayText: '''
 position.longitude: ${position.longitude}
 position.latitude: ${position.latitude}
 position.timestamp: ${position.timestamp}
@@ -102,8 +112,11 @@ position.speed: ${position.speed}
 position.speedAccuracy: ${position.speedAccuracy}
 position.floor: ${position.floor}
 position.isMocked: ${position.isMocked}
-                  ''');
-                });
+                    ''');
+                  });
+                } catch (error) {
+                  _onChangeText(errorText: error.toString());
+                }
               },
               icon: const Icon(Icons.assistant_navigation),
             ),

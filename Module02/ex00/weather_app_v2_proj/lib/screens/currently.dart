@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class CurrentlyTab extends StatefulWidget {
   final String displayText;
+  final String? errorText;
 
   const CurrentlyTab({
     super.key,
     this.displayText = '',
+    this.errorText,
   });
 
   @override
@@ -18,8 +20,11 @@ class CurrentlyTabState extends State<CurrentlyTab> {
     return Scaffold(
       body: Center(
         child: Text(
-          'Currently\n${widget.displayText}',
+          widget.errorText ?? 'Currently\n${widget.displayText}',
           textAlign: TextAlign.center,
+          style: widget.errorText == null
+              ? null
+              : const TextStyle(color: Colors.red),
         ),
       ),
     );
