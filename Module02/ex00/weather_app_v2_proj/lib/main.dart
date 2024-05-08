@@ -115,7 +115,9 @@ position.isMocked: ${position.isMocked}
                     ''');
                   });
                 } catch (error) {
-                  _onChangeText(errorText: error.toString());
+                  setState(() {
+                    _onChangeText(errorText: error.toString());
+                  });
                 }
               },
               icon: const Icon(Icons.assistant_navigation),
