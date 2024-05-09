@@ -100,7 +100,7 @@ class MainAppState extends State<MainApp> {
               onPressed: () async {
                 try {
                   GeoCoding ret = await fetchGeoCoding('tokyo');
-                  print(ret);
+                  print('fetchGeoCoding:${ret.geoData[0]}');
                   Position position = await GeoLocator.determinePosition();
                   setState(() {
                     _onChangeText(
