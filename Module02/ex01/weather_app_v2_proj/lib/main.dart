@@ -75,18 +75,35 @@ class MainAppState extends State<MainApp> {
           // 左側のアイコン
           leading: const Icon(Icons.search),
           // タイトルテキスト
-          title: TextField(
-            textAlign: TextAlign.left,
-            controller: _textEditingController,
-            onChanged: (text) {
-              setState(() {
-                _onChangeText(displayText: text);
-              });
+          title: Autocomplete<String>(
+            fieldViewBuilder:
+                (context, textEditingController, focusNode, onFieldSubmitted) {
+              return TextField(
+                controller: textEditingController,
+                focusNode:focusNode,
+                onChanged: (text) {
+                  setState(() {
+                    _onChangeText(displayText: text);
+                  });
+                },
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  labelText: 'Search location...',
+                ),
+              );
             },
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              labelText: 'Search location...',
-            ),
+            optionsBuilder: (TextEditingValue textEditingValue) async {
+              if (textEditingValue.text.length < 3) {
+                return const Iterable.empty();
+              } else {
+                GeoCoding ret = await fetchGeoCoding(textEditingValue.text);
+                print('fetchGeoCoding:${ret.geoData[0]}');
+                return ret.geoData.map((e) => e['name']);
+              }
+            },
+            onSelected: (String selected) {
+              print('selected: $selected');
+            },
           ),
           // 右側のアイコン一覧
           actions: <Widget>[
@@ -99,8 +116,6 @@ class MainAppState extends State<MainApp> {
             IconButton(
               onPressed: () async {
                 try {
-                  GeoCoding ret = await fetchGeoCoding('tokyo');
-                  print('fetchGeoCoding:${ret.geoData[0]}');
                   Position position = await GeoLocator.determinePosition();
                   setState(() {
                     _onChangeText(
