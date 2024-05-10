@@ -20,6 +20,8 @@ class MainApp extends StatefulWidget {
 class MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
+  String? _searchingWithQuery;
+  late Iterable<Map<String, dynamic>> _lastOptions = <Map<String, dynamic>>[];
 
   late List<Widget> _widgetOptions = <Widget>[
     const CurrentlyTab(),
@@ -95,9 +97,13 @@ class MainAppState extends State<MainApp> {
               if (textEditingValue.text.length < 3) {
                 return const Iterable.empty();
               } else {
+                _searchingWithQuery = textEditingValue.text;
                 GeoCoding ret = await fetchGeoCoding(textEditingValue.text);
-                print('fetchGeoCoding:${ret.geoData[0]}');
-                return ret.geoData.map((e) => e);
+                if (_searchingWithQuery != textEditingValue.text) {
+                  return _lastOptions;
+                }
+                _lastOptions = ret.geoData.map((e) => e);
+                return _lastOptions;
               }
             },
             onSelected: (dynamic selected) {

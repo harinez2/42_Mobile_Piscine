@@ -12,7 +12,10 @@ class GeoCoding {
     required this.geoData,
   });
 
-  factory GeoCoding.fromJson(Map<String, dynamic> json) {
+  factory GeoCoding.fromJson(Map<String, dynamic>? json) {
+    if (json == null || json['results'] == null) {
+      return GeoCoding(geoData: []);
+    }
     return GeoCoding(
       geoData: List<Map<String, dynamic>>.from(json['results']),
     );
