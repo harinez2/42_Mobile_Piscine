@@ -19,7 +19,6 @@ class MainApp extends StatefulWidget {
 
 class MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
-  late TextEditingController _textEditingController;
   final PageController _pageController = PageController(initialPage: 0);
 
   late List<Widget> _widgetOptions = <Widget>[
@@ -31,7 +30,6 @@ class MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController();
   }
 
   void _onChangeText({String displayText = '', String? errorText}) {
@@ -80,7 +78,7 @@ class MainAppState extends State<MainApp> {
                 (context, textEditingController, focusNode, onFieldSubmitted) {
               return TextField(
                 controller: textEditingController,
-                focusNode:focusNode,
+                focusNode: focusNode,
                 onChanged: (text) {
                   setState(() {
                     _onChangeText(displayText: text);
@@ -102,7 +100,9 @@ class MainAppState extends State<MainApp> {
               }
             },
             onSelected: (String selected) {
-              print('selected: $selected');
+              setState(() {
+                _onChangeText(displayText: selected);
+              });
             },
           ),
           // 右側のアイコン一覧
