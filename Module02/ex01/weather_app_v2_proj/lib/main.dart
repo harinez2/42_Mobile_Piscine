@@ -73,7 +73,8 @@ class MainAppState extends State<MainApp> {
           // 左側のアイコン
           leading: const Icon(Icons.search),
           // タイトルテキスト
-          title: Autocomplete<String>(
+          title: Autocomplete<Map<String, dynamic>>(
+            displayStringForOption: (e) => e['name'],
             fieldViewBuilder:
                 (context, textEditingController, focusNode, onFieldSubmitted) {
               return TextField(
@@ -96,12 +97,12 @@ class MainAppState extends State<MainApp> {
               } else {
                 GeoCoding ret = await fetchGeoCoding(textEditingValue.text);
                 print('fetchGeoCoding:${ret.geoData[0]}');
-                return ret.geoData.map((e) => e['name']);
+                return ret.geoData.map((e) => e);
               }
             },
-            onSelected: (String selected) {
+            onSelected: (dynamic selected) {
               setState(() {
-                _onChangeText(displayText: selected);
+                _onChangeText(displayText: selected['name']);
               });
             },
           ),

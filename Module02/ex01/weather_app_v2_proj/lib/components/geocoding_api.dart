@@ -6,7 +6,7 @@ const String geoCodingApiRoute =
     "https://geocoding-api.open-meteo.com/v1/search";
 
 class GeoCoding {
-  final List geoData;
+  final List<Map<String, dynamic>> geoData;
 
   GeoCoding({
     required this.geoData,
@@ -14,7 +14,7 @@ class GeoCoding {
 
   factory GeoCoding.fromJson(Map<String, dynamic> json) {
     return GeoCoding(
-      geoData: json['results'],
+      geoData: List<Map<String, dynamic>>.from(json['results']),
     );
   }
 }
