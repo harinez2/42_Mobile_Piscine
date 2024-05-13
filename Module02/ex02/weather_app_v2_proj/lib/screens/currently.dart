@@ -23,7 +23,7 @@ class CurrentlyTabState extends State<CurrentlyTab> {
           widget.errorText ??
               (widget.geoData['name'] != null
                   ? 'Currently\n${widget.geoData['name']}'
-                  : 'Currently'),
+                  : 'Currently\n'),
           textAlign: TextAlign.center,
           style: widget.errorText == null
               ? null
