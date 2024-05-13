@@ -37,7 +37,7 @@ class MainAppState extends State<MainApp> {
   void _onChangeText({String displayText = '', String? errorText}) {
     _widgetOptions = <Widget>[
       CurrentlyTab(
-        displayText: displayText,
+        geoData: const {},
         errorText: errorText,
       ),
       TodayTab(
