@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TodayTab extends StatefulWidget {
-  final String displayText;
+  final Map<String, dynamic> geoData;
   final String? errorText;
 
   const TodayTab({
     super.key,
-    this.displayText = '',
+    this.geoData = const {},
     this.errorText,
   });
 
@@ -20,7 +20,10 @@ class TodayTabState extends State<TodayTab> {
     return Scaffold(
       body: Center(
         child: Text(
-          widget.errorText ?? 'Today\n${widget.displayText}',
+          widget.errorText ??
+              (widget.geoData['name'] != null
+                  ? 'Today\n${widget.geoData['name']}'
+                  : 'Today\n'),
           textAlign: TextAlign.center,
           style: widget.errorText == null
               ? null

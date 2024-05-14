@@ -34,18 +34,18 @@ class MainAppState extends State<MainApp> {
     super.initState();
   }
 
-  void _onChangeText({String displayText = '', String? errorText}) {
+  void _onSelected({dynamic geoData = const {}, String? errorText}) {
     _widgetOptions = <Widget>[
       CurrentlyTab(
-        geoData: const {},
+        geoData: geoData,
         errorText: errorText,
       ),
       TodayTab(
-        displayText: displayText,
+        geoData: geoData,
         errorText: errorText,
       ),
       WeeklyTab(
-        displayText: displayText,
+        geoData: geoData,
         errorText: errorText,
       ),
     ];
@@ -82,11 +82,6 @@ class MainAppState extends State<MainApp> {
               return TextField(
                 controller: textEditingController,
                 focusNode: focusNode,
-                onChanged: (text) {
-                  setState(() {
-                    _onChangeText(displayText: text);
-                  });
-                },
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   labelText: 'Search location...',
@@ -108,7 +103,7 @@ class MainAppState extends State<MainApp> {
             },
             onSelected: (dynamic selected) {
               setState(() {
-                _onChangeText(displayText: selected['name']);
+                _onSelected(geoData: selected);
               });
             },
           ),
@@ -124,13 +119,13 @@ class MainAppState extends State<MainApp> {
               onPressed: () async {
                 try {
                   Position position = await GeoLocator.determinePosition();
+                  print(GeoLocator.getDetailText(position));
                   setState(() {
-                    _onChangeText(
-                        displayText: GeoLocator.getDetailText(position));
+                    _onSelected(geoData: GeoLocator.toMap(position));
                   });
                 } catch (error) {
                   setState(() {
-                    _onChangeText(errorText: error.toString());
+                    _onSelected(errorText: error.toString());
                   });
                 }
               },

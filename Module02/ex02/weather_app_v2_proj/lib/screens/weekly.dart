@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WeeklyTab extends StatefulWidget {
-  final String displayText;
+  final Map<String, dynamic> geoData;
   final String? errorText;
 
   const WeeklyTab({
     super.key,
-    this.displayText = '',
+    this.geoData = const {},
     this.errorText,
   });
 
@@ -20,7 +20,10 @@ class WeeklyTabState extends State<WeeklyTab> {
     return Scaffold(
       body: Center(
         child: Text(
-          widget.errorText ?? 'Weekly\n${widget.displayText}',
+          widget.errorText ??
+              (widget.geoData['name'] != null
+                  ? 'Weekly\n${widget.geoData['name']}'
+                  : 'Weekly\n'),
           textAlign: TextAlign.center,
           style: widget.errorText == null
               ? null

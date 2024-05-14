@@ -27,6 +27,23 @@ class GeoLocator {
         desiredAccuracy: LocationAccuracy.high);
   }
 
+  static Map<String, dynamic> toMap(Position position) {
+    return {
+      'longitude': position.longitude,
+      'latitude': position.latitude,
+      'timestamp': position.timestamp,
+      'accuracy': position.accuracy,
+      'altitude': position.altitude,
+      'altitudeAccuracy': position.altitudeAccuracy,
+      'heading': position.heading,
+      'headingAccuracy': position.headingAccuracy,
+      'speed': position.speed,
+      'speedAccuracy': position.speedAccuracy,
+      'floor': position.floor,
+      'isMocked': position.isMocked,
+    };
+  }
+
   static String getDetailText(Position position) {
     return '''
 position.longitude: ${position.longitude}
