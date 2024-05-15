@@ -25,7 +25,7 @@ class WeatherForecast {
 Future<WeatherForecast> fetchForecastCurrent(
     double latitude, double longitude) async {
   final res = await http.get(Uri.parse(
-      '$weatherForecastApiRoute?latitude=$latitude&longitude=$longitude&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m'));
+      '$weatherForecastApiRoute?latitude=$latitude&longitude=$longitude&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m,wind_speed_10m'));
   if (res.statusCode == 200) {
     return WeatherForecast.fromJson(jsonDecode(res.body));
   } else {

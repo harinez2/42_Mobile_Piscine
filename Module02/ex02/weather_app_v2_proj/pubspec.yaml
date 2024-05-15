@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   geolocator: ^11.0.0
   http: ^1.2.1
+  sprintf: ^7.0.0
 
 dev_dependencies:
   flutter_test:
