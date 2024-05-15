@@ -46,10 +46,7 @@ class WeeklyTabState extends State<WeeklyTab> {
             children = widget.errorText!;
             errorFlag = true;
           } else if (snapshot.hasData) {
-            String weatherString = getWeatherString(
-                forecast?.forecastData['current']['weather_code']);
             children = """
-Weather: $weatherString
 City: ${widget.geoData['name']}
 Country: ${widget.geoData['country']}
 """;
