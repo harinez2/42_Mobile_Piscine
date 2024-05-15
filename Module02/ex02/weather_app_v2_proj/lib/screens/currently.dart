@@ -49,9 +49,9 @@ class CurrentlyTabState extends State<CurrentlyTab> {
             final weatherString = getWeatherString(
                 forecast?.forecastData['current']['weather_code']);
             children = """
+Weather: $weatherString
 City: ${widget.geoData['name']}
 Country: ${widget.geoData['country']}
-Weather: $weatherString
 Temperature: ${forecast?.forecastData['current']['temperature_2m']}${forecast?.forecastData['current_units']['temperature_2m']}
 Wind speed: ${forecast?.forecastData['current']['wind_speed_10m']}${forecast?.forecastData['current_units']['wind_speed_10m']}
             """;
