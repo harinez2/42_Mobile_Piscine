@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-const int maxId = 1010;
+// API Reference  https://open-meteo.com/en/docs/geocoding-api
+
 const String geoCodingApiRoute =
     "https://geocoding-api.open-meteo.com/v1/search";
 
