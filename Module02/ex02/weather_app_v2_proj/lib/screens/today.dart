@@ -4,11 +4,13 @@ import '../components/weather_forecast_api.dart';
 
 class TodayTab extends StatefulWidget {
   final Map<String, dynamic> geoData;
+  final WeatherForecast? forecast;
   final String? errorText;
 
   const TodayTab({
     super.key,
     this.geoData = const {},
+    this.forecast,
     this.errorText,
   });
 
@@ -35,45 +37,41 @@ class TodayTabState extends State<TodayTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: FutureBuilder<WeatherForecast?>(
-        future: getForecast(),
-        builder:
-            (BuildContext context, AsyncSnapshot<WeatherForecast?> snapshot) {
-          String children;
-          bool errorFlag = false;
-          if (widget.errorText != null) {
-            children = widget.errorText!;
-            errorFlag = true;
-          } else if (snapshot.hasData) {
-            String weatherString = getWeatherString(
-                forecast?.forecastData['current']['weather_code']);
-            children = """
+    String weatherText;
+    bool errorFlag = false;
+
+    if (widget.errorText != null) {
+      weatherText = widget.errorText!;
+      errorFlag = true;
+    } else if (widget.forecast != null) {
+      final String weatherString = getWeatherString(
+          widget.forecast?.forecastData['current']['weather_code']);
+      weatherText = """
 Weather: $weatherString
 City: ${widget.geoData['name']}
 Country: ${widget.geoData['country']}
 """;
-            for (int i = 0; i < 24; i++) {
-              children += sprintf("%02i:00", [i]);
-              children += "          ";
-              children += "${forecast?.forecastData['hourly']['temperature_2m'][i]}${forecast?.forecastData['hourly_units']['temperature_2m']}";
-              children += "          ";
-              children += "${forecast?.forecastData['hourly']['wind_speed_10m'][i]}${forecast?.forecastData['hourly_units']['wind_speed_10m']}\n";
-            }
-          } else if (snapshot.hasError) {
-            children = 'Error: ${snapshot.error}';
-            errorFlag = true;
-          } else {
-            children = '';
-          }
-          return Text(
-            children,
-            textAlign: TextAlign.center,
-            style: errorFlag ? const TextStyle(color: Colors.red) : null,
-          );
-        },
-      )),
+      for (int i = 0; i < 24; i++) {
+        weatherText += sprintf("%02i:00", [i]);
+        weatherText += "          ";
+        weatherText +=
+            "${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}";
+        weatherText += "          ";
+        weatherText +=
+            "${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}\n";
+      }
+    } else {
+      weatherText = '';
+    }
+
+    return Scaffold(
+      body: Center(
+        child: Text(
+          weatherText,
+          textAlign: TextAlign.center,
+          style: errorFlag ? const TextStyle(color: Colors.red) : null,
+        ),
+      ),
     );
   }
 }

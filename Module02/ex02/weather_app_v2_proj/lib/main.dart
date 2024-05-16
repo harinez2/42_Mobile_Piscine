@@ -5,6 +5,7 @@ import 'screens/today.dart';
 import 'screens/weekly.dart';
 import 'components/geolocator.dart';
 import 'components/geocoding_api.dart';
+import 'components/weather_forecast_api.dart';
 
 void main() {
   runApp(const MainApp());
@@ -34,21 +35,43 @@ class MainAppState extends State<MainApp> {
     super.initState();
   }
 
-  void _onSelected({dynamic geoData = const {}, String? errorText}) {
-    _widgetOptions = <Widget>[
-      CurrentlyTab(
-        geoData: geoData,
-        errorText: errorText,
-      ),
-      TodayTab(
-        geoData: geoData,
-        errorText: errorText,
-      ),
-      WeeklyTab(
-        geoData: geoData,
-        errorText: errorText,
-      ),
-    ];
+  Future<WeatherForecast?> getForecast(
+      double? latitude, double? longtitude) async {
+    try {
+      if (latitude != null && longtitude != null) {
+        return await fetchForecastCurrent(latitude, longtitude);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  void _onSelected({dynamic geoData = const {}, String? errorText}) async {
+    WeatherForecast? forecast;
+    if (geoData != {}) {
+      forecast = await getForecast(geoData['latitude'], geoData['longitude']);
+    }
+    setState(() {
+      _widgetOptions = <Widget>[
+        CurrentlyTab(
+          geoData: geoData,
+          forecast: forecast,
+          errorText: errorText,
+        ),
+        TodayTab(
+          geoData: geoData,
+          forecast: forecast,
+          errorText: errorText,
+        ),
+        WeeklyTab(
+          geoData: geoData,
+          forecast: forecast,
+          errorText: errorText,
+        ),
+      ];
+    });
   }
 
   void _onPageChanged(int index) {

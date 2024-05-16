@@ -3,11 +3,13 @@ import '../components/weather_forecast_api.dart';
 
 class WeeklyTab extends StatefulWidget {
   final Map<String, dynamic> geoData;
+  final WeatherForecast? forecast;
   final String? errorText;
 
   const WeeklyTab({
     super.key,
     this.geoData = const {},
+    this.forecast,
     this.errorText,
   });
 
@@ -18,64 +20,44 @@ class WeeklyTab extends StatefulWidget {
 class WeeklyTabState extends State<WeeklyTab> {
   WeatherForecast? forecast;
 
-  Future<WeatherForecast?> getForecast() async {
-    try {
-      if (widget.geoData != {}) {
-        forecast = await fetchForecastCurrent(
-            widget.geoData['latitude'], widget.geoData['longitude']);
-        return forecast;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: FutureBuilder<WeatherForecast?>(
-        future: getForecast(),
-        builder:
-            (BuildContext context, AsyncSnapshot<WeatherForecast?> snapshot) {
-          String children;
-          bool errorFlag = false;
-          if (widget.errorText != null) {
-            children = widget.errorText!;
-            errorFlag = true;
-          } else if (snapshot.hasData) {
-            children = """
+    String weatherText;
+    bool errorFlag = false;
+
+    if (widget.errorText != null) {
+      weatherText = widget.errorText!;
+      errorFlag = true;
+    } else if (widget.forecast != null) {
+      weatherText = """
 City: ${widget.geoData['name']}
 Country: ${widget.geoData['country']}
 """;
-            for (int i = 0; i < 7; i++) {
-              children += "${forecast?.forecastData['daily']['time'][i]}";
-              children += "          ";
-              children +=
-                  "${forecast?.forecastData['daily']['temperature_2m_min'][i]}${forecast?.forecastData['daily_units']['temperature_2m_min']}";
-              children += "          ";
-              children +=
-                  "${forecast?.forecastData['daily']['temperature_2m_max'][i]}${forecast?.forecastData['daily_units']['temperature_2m_max']}";
-              children += "          ";
-              children += getWeatherString(
-                  forecast?.forecastData['daily']['weather_code'][i]);
-              children += "\n";
-            }
-          } else if (snapshot.hasError) {
-            children = 'Error: ${snapshot.error}';
-            errorFlag = true;
-          } else {
-            children = '';
-          }
-          return Text(
-            children,
-            textAlign: TextAlign.center,
-            style: errorFlag ? const TextStyle(color: Colors.red) : null,
-          );
-        },
-      )),
+      for (int i = 0; i < 7; i++) {
+        weatherText += "${widget.forecast?.forecastData['daily']['time'][i]}";
+        weatherText += "          ";
+        weatherText +=
+            "${widget.forecast?.forecastData['daily']['temperature_2m_min'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_min']}";
+        weatherText += "          ";
+        weatherText +=
+            "${widget.forecast?.forecastData['daily']['temperature_2m_max'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']}";
+        weatherText += "          ";
+        weatherText += getWeatherString(
+            widget.forecast?.forecastData['daily']['weather_code'][i]);
+        weatherText += "\n";
+      }
+    } else {
+      weatherText = '';
+    }
+
+    return Scaffold(
+      body: Center(
+        child: Text(
+          weatherText,
+          textAlign: TextAlign.center,
+          style: errorFlag ? const TextStyle(color: Colors.red) : null,
+        ),
+      ),
     );
   }
 }
