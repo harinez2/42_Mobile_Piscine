@@ -102,7 +102,8 @@ class MainAppState extends State<MainApp> {
           leading: const Icon(Icons.search),
           // タイトルテキスト
           title: Autocomplete<Map<String, dynamic>>(
-            displayStringForOption: (e) => e['name'],
+            displayStringForOption: (e) =>
+                "${e['name']}, ${e['admin1']}, ${e['country']}",
             fieldViewBuilder:
                 (context, textEditingController, focusNode, onFieldSubmitted) {
               return TextField(
@@ -125,7 +126,7 @@ class MainAppState extends State<MainApp> {
                   return _lastOptions;
                 }
                 if (ret != null) {
-                  _lastOptions = ret.geoData.map((e) => e);
+                  _lastOptions = ret.geoData;
                 }
                 return _lastOptions;
               }
