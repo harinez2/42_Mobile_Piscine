@@ -5,6 +5,7 @@ import 'screens/today.dart';
 import 'screens/weekly.dart';
 import 'components/geolocator.dart';
 import 'components/geocoding_api.dart';
+import 'components/debounce.dart';
 
 void main() {
   runApp(const MainApp());
@@ -20,8 +21,9 @@ class MainApp extends StatefulWidget {
 class MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
-  String? _searchingWithQuery;
+  String? _currentQuery;
   late Iterable<Map<String, dynamic>> _lastOptions = <Map<String, dynamic>>[];
+  late final Debounceable<GeoCoding, String> _debounceFetchGeoCoding;
 
   late List<Widget> _widgetOptions = <Widget>[
     const CurrentlyTab(),
@@ -32,6 +34,7 @@ class MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    _debounceFetchGeoCoding = debounce<GeoCoding, String>(fetchGeoCoding);
   }
 
   void _onChangeText({String displayText = '', String? errorText}) {
@@ -97,12 +100,15 @@ class MainAppState extends State<MainApp> {
               if (textEditingValue.text.length < 3) {
                 return const Iterable.empty();
               } else {
-                _searchingWithQuery = textEditingValue.text;
-                GeoCoding ret = await fetchGeoCoding(textEditingValue.text);
-                if (_searchingWithQuery != textEditingValue.text) {
+                _currentQuery = textEditingValue.text;
+                GeoCoding? ret =
+                    await _debounceFetchGeoCoding(textEditingValue.text);
+                if (_currentQuery != textEditingValue.text) {
                   return _lastOptions;
                 }
-                _lastOptions = ret.geoData.map((e) => e);
+                if (ret != null) {
+                  _lastOptions = ret.geoData.map((e) => e);
+                }
                 return _lastOptions;
               }
             },
