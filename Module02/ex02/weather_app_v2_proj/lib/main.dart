@@ -5,6 +5,7 @@ import 'screens/today.dart';
 import 'screens/weekly.dart';
 import 'components/geolocator.dart';
 import 'components/geocoding_api.dart';
+import 'components/geocoding_api_google.dart';
 import 'components/weather_forecast_api.dart';
 import 'components/debounce.dart';
 
@@ -164,8 +165,21 @@ class MainAppState extends State<MainApp> {
                 try {
                   Position position = await GeoLocator.determinePosition();
                   print(GeoLocator.getDetailText(position));
+                  ReverseGeoCoding revGeo = await fetchReverseGeoCoding(
+                      position.latitude.toString(),
+                      position.longitude.toString());
+                  print(revGeo.geoData['compound_code']);
+                  Map<String, dynamic> newGeoData = GeoLocator.toMap(position);
+                  final int separateCountryPos =
+                      revGeo.geoData['compound_code'].lastIndexOf(' ');
+                  newGeoData['name'] = revGeo.geoData['compound_code']
+                      .substring(
+                          revGeo.geoData['compound_code'].indexOf(' ') + 1,
+                          separateCountryPos - 1);
+                  newGeoData['country'] = revGeo.geoData['compound_code']
+                      .substring(separateCountryPos + 1);
                   setState(() {
-                    _onSelected(geoData: GeoLocator.toMap(position));
+                    _onSelected(geoData: newGeoData);
                   });
                 } catch (error) {
                   setState(() {
