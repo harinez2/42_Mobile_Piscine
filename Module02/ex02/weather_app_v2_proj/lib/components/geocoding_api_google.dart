@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// API Reference  https://developers.google.com/maps/documentation/geocoding/overview?hl=ja
+// API Reference
+//   https://developers.google.com/maps/documentation/geocoding/overview?hl=ja
+//   https://developers.google.com/maps/documentation/geocoding/requests-reverse-geocoding?hl=ja
 
 const String geoCodingApiRoute =
     "https://maps.googleapis.com/maps/api/geocode/json";
