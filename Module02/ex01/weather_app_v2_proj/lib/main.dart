@@ -22,8 +22,9 @@ class MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
   String? _currentQuery;
-  late Iterable<Map<String, dynamic>> _lastOptions = <Map<String, dynamic>>[];
+  Iterable<Map<String, dynamic>> _lastOptions = <Map<String, dynamic>>[];
   late final Debounceable<GeoCoding, String> _debounceFetchGeoCoding;
+  bool _networkError = false;
 
   late List<Widget> _widgetOptions = <Widget>[
     const CurrentlyTab(),
@@ -75,6 +76,7 @@ class MainAppState extends State<MainApp> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
+          toolbarHeight: 80.0,
           // 左側のアイコン
           leading: const Icon(Icons.search),
           // タイトルテキスト
@@ -91,19 +93,31 @@ class MainAppState extends State<MainApp> {
                     _onChangeText(displayText: text);
                   });
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: InputBorder.none,
                   labelText: 'Search location...',
+                  errorText: _networkError
+                      ? 'Network error, please check the network connection.'
+                      : null,
                 ),
               );
             },
             optionsBuilder: (TextEditingValue textEditingValue) async {
+              setState(() {
+                _networkError = false;
+              });
               if (textEditingValue.text.length < 3) {
                 return const Iterable.empty();
               } else {
                 _currentQuery = textEditingValue.text;
-                GeoCoding? ret =
-                    await _debounceFetchGeoCoding(textEditingValue.text);
+                GeoCoding? ret;
+                try {
+                  ret = await _debounceFetchGeoCoding(textEditingValue.text);
+                } catch (error) {
+                  setState(() {
+                    _networkError = true;
+                  });
+                }
                 if (_currentQuery != textEditingValue.text) {
                   return _lastOptions;
                 }
