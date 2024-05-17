@@ -164,11 +164,9 @@ class MainAppState extends State<MainApp> {
               onPressed: () async {
                 try {
                   Position position = await GeoLocator.determinePosition();
-                  print(GeoLocator.getDetailText(position));
                   ReverseGeoCoding revGeo = await fetchReverseGeoCoding(
                       position.latitude.toString(),
                       position.longitude.toString());
-                  print(revGeo.geoData['compound_code']);
                   Map<String, dynamic> newGeoData = GeoLocator.toMap(position);
                   final int separateCountryPos =
                       revGeo.geoData['compound_code'].lastIndexOf(' ');
