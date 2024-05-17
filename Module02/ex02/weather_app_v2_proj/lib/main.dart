@@ -53,7 +53,8 @@ class MainAppState extends State<MainApp> {
     }
   }
 
-  void _onSelected({dynamic geoData = const {}, String? errorText}) async {
+  void _onSelected(
+      {Map<String, dynamic> geoData = const {}, String? errorText}) async {
     WeatherForecast? forecast;
     if (geoData != {}) {
       forecast = await getForecast(geoData['latitude'], geoData['longitude']);
