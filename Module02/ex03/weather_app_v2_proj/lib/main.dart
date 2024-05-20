@@ -42,13 +42,9 @@ class MainAppState extends State<MainApp> {
 
   Future<WeatherForecast?> getForecast(
       double? latitude, double? longtitude) async {
-    try {
-      if (latitude != null && longtitude != null) {
-        return await fetchForecastCurrent(latitude, longtitude);
-      } else {
-        return null;
-      }
-    } catch (error) {
+    if (latitude != null && longtitude != null) {
+      return await fetchForecastCurrent(latitude, longtitude);
+    } else {
       return null;
     }
   }
@@ -56,8 +52,16 @@ class MainAppState extends State<MainApp> {
   void _onSelected(
       {Map<String, dynamic> geoData = const {}, String? errorText}) async {
     WeatherForecast? forecast;
-    if (geoData != {}) {
-      forecast = await getForecast(geoData['latitude'], geoData['longitude']);
+    if (geoData != {} && errorText == null) {
+      try {
+        forecast = await getForecast(geoData['latitude'], geoData['longitude']);
+        if (forecast == null) {
+          errorText = 'Failed to recognize weather forecast data.';
+        }
+      } catch (error) {
+        errorText = 'Failed to load weather forecast information.';
+        print(error.toString());
+      }
     }
     setState(() {
       _widgetOptions = <Widget>[
@@ -136,7 +140,8 @@ class MainAppState extends State<MainApp> {
                     }
                   } catch (error) {
                     setState(() {
-                      _onSelected(errorText: error.toString());
+                      _onSelected(errorText: 'Failed to convert city name to coordinates.');
+                      print(error.toString());
                     });
                   }
                 },
@@ -203,7 +208,8 @@ class MainAppState extends State<MainApp> {
                   });
                 } catch (error) {
                   setState(() {
-                    _onSelected(errorText: error.toString());
+                    _onSelected(errorText: 'Failed to retrieve city name from coordinates.');
+                    print(error.toString());
                   });
                 }
               },
