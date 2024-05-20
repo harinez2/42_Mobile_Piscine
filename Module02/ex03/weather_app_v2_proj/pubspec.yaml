@@ -20,3 +20,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto.ttf
+    - family: Noto Sans JP
+      fonts:
+        - asset: fonts/NotoSansJP.ttf

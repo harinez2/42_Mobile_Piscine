@@ -102,6 +102,7 @@ class MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'Noto Sans JP'),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
