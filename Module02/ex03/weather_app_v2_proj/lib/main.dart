@@ -120,6 +120,26 @@ class MainAppState extends State<MainApp> {
                       ? 'Network error, please check the network connection.'
                       : null,
                 ),
+                onSubmitted: (value) async {
+                  // 都市名入力してEnterを押した場合
+                  try {
+                    GeoCoding geo = await fetchGeoCoding(value);
+                    if (geo.geoData.isEmpty) {
+                      setState(() {
+                        _onSelected(
+                            errorText: 'Specified city name does not exist.');
+                      });
+                    } else {
+                      setState(() {
+                        _onSelected(geoData: geo.geoData.first);
+                      });
+                    }
+                  } catch (error) {
+                    setState(() {
+                      _onSelected(errorText: error.toString());
+                    });
+                  }
+                },
               );
             },
             optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -148,6 +168,7 @@ class MainAppState extends State<MainApp> {
               }
             },
             onSelected: (dynamic selected) {
+              // 都市名入力後、候補を選択した場合
               setState(() {
                 _onSelected(geoData: selected);
               });
