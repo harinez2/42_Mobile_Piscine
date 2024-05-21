@@ -99,6 +99,22 @@ class MainAppState extends State<MainApp> {
     });
   }
 
+  Map<String, dynamic>? selectedOption;
+
+  void setSelectedOption(Map<String, dynamic> option) {
+    setState(() {
+      selectedOption = option;
+    });
+  }
+
+  Map<String, dynamic>? hoveredOption;
+
+  void setHoveredOption(Map<String, dynamic> option) {
+    setState(() {
+      hoveredOption = option;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -180,6 +196,69 @@ class MainAppState extends State<MainApp> {
                 }
                 return _lastOptions;
               }
+            },
+            optionsViewBuilder: (context, onSelected, options) {
+              final optionList = options.toList();
+              return ListView.builder(
+                itemCount: options.length,
+                itemBuilder: (context, index) {
+                  final option = optionList[index];
+                  return MouseRegion(
+                    onEnter: (_) {
+                      // ホバー時の処理
+                      setState(() {
+                        hoveredOption = option;
+                      });
+                    },
+                    onExit: (_) {
+                      // ホバーが外れたときの処理
+                      setState(() {
+                        hoveredOption = null;
+                      });
+                    },
+                    child: GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                        setSelectedOption(option);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        color: option == selectedOption
+                            ? Colors.blue.withOpacity(0.3)
+                            : hoveredOption == option
+                                ? Colors.grey.withOpacity(0.1)
+                                : Colors.white,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: option['name'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: option == selectedOption
+                                      ? Colors.blue
+                                      : Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    ", ${option['admin1']}, ${option['country']}",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: option == selectedOption
+                                      ? Colors.blue
+                                      : Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
             },
             onSelected: (dynamic selected) {
               // 都市名入力後、候補を選択した場合
