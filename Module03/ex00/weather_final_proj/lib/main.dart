@@ -105,10 +105,10 @@ class MainAppState extends State<MainApp> {
       theme: ThemeData(fontFamily: 'Noto Sans JP'),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.blueGrey[700],
           toolbarHeight: 80.0,
           // 左側のアイコン
-          leading: const Icon(Icons.search),
+          leading: Icon(Icons.search, color: Colors.blueGrey.shade200),
           // タイトルテキスト
           title: Autocomplete<Map<String, dynamic>>(
             displayStringForOption: (e) =>
@@ -121,9 +121,15 @@ class MainAppState extends State<MainApp> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   labelText: 'Search location...',
+                  labelStyle: TextStyle(
+                    color: Colors.blueGrey.shade500,
+                  ),
                   errorText: _networkError
                       ? 'Network error, please check the network connection.'
                       : null,
+                ),
+                style: TextStyle(
+                  color: Colors.blueGrey.shade200,
                 ),
                 onSubmitted: (value) async {
                   // 都市名入力してEnterを押した場合
@@ -141,7 +147,9 @@ class MainAppState extends State<MainApp> {
                     }
                   } catch (error) {
                     setState(() {
-                      _onSelected(errorText: 'Failed to convert city name to coordinates.');
+                      _onSelected(
+                          errorText:
+                              'Failed to convert city name to coordinates.');
                       print(error.toString());
                     });
                   }
@@ -183,7 +191,7 @@ class MainAppState extends State<MainApp> {
           // 右側のアイコン一覧
           actions: <Widget>[
             VerticalDivider(
-              color: Colors.blueGrey.shade300,
+              color: Colors.blueGrey.shade200,
               thickness: 2,
               indent: 10,
               endIndent: 10,
@@ -209,12 +217,17 @@ class MainAppState extends State<MainApp> {
                   });
                 } catch (error) {
                   setState(() {
-                    _onSelected(errorText: 'Failed to retrieve city name from coordinates.');
+                    _onSelected(
+                        errorText:
+                            'Failed to retrieve city name from coordinates.');
                     print(error.toString());
                   });
                 }
               },
-              icon: const Icon(Icons.assistant_navigation),
+              icon: Icon(
+                Icons.assistant_navigation,
+                color: Colors.blueGrey.shade200,
+              ),
             ),
           ],
         ),
