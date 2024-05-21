@@ -49,7 +49,7 @@ class MainAppState extends State<MainApp> {
     }
   }
 
-  void _onSelected(
+  void _recreateTabs(
       {Map<String, dynamic> geoData = const {}, String? errorText}) async {
     WeatherForecast? forecast;
     if (geoData != {} && errorText == null) {
@@ -99,22 +99,6 @@ class MainAppState extends State<MainApp> {
     });
   }
 
-  Map<String, dynamic>? selectedOption;
-
-  void setSelectedOption(Map<String, dynamic> option) {
-    setState(() {
-      selectedOption = option;
-    });
-  }
-
-  Map<String, dynamic>? hoveredOption;
-
-  void setHoveredOption(Map<String, dynamic> option) {
-    setState(() {
-      hoveredOption = option;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -152,22 +136,17 @@ class MainAppState extends State<MainApp> {
                   try {
                     GeoCoding geo = await fetchGeoCoding(value);
                     if (geo.geoData.isEmpty) {
-                      setState(() {
-                        _onSelected(
-                            errorText: 'Specified city name does not exist.');
-                      });
+                      _recreateTabs(
+                        errorText: 'Specified city name does not exist.',
+                      );
                     } else {
-                      setState(() {
-                        _onSelected(geoData: geo.geoData.first);
-                      });
+                      _recreateTabs(geoData: geo.geoData.first);
                     }
                   } catch (error) {
-                    setState(() {
-                      _onSelected(
-                          errorText:
-                              'Failed to convert city name to coordinates.');
-                      print(error.toString());
-                    });
+                    _recreateTabs(
+                      errorText: 'Failed to convert city name to coordinates.',
+                    );
+                    print(error.toString());
                   }
                 },
               );
@@ -198,73 +177,12 @@ class MainAppState extends State<MainApp> {
               }
             },
             optionsViewBuilder: (context, onSelected, options) {
-              final optionList = options.toList();
-              return ListView.builder(
-                itemCount: options.length,
-                itemBuilder: (context, index) {
-                  final option = optionList[index];
-                  return MouseRegion(
-                    onEnter: (_) {
-                      // ホバー時の処理
-                      setState(() {
-                        hoveredOption = option;
-                      });
-                    },
-                    onExit: (_) {
-                      // ホバーが外れたときの処理
-                      setState(() {
-                        hoveredOption = null;
-                      });
-                    },
-                    child: GestureDetector(
-                      onTap: () {
-                        onSelected(option);
-                        setSelectedOption(option);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        color: option == selectedOption
-                            ? Colors.blue.withOpacity(0.3)
-                            : hoveredOption == option
-                                ? Colors.grey.withOpacity(0.1)
-                                : Colors.white,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: option['name'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: option == selectedOption
-                                      ? Colors.blue
-                                      : Colors.black,
-                                ),
-                              ),
-                              TextSpan(
-                                text:
-                                    ", ${option['admin1']}, ${option['country']}",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: option == selectedOption
-                                      ? Colors.blue
-                                      : Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
+              return _CustomOptionsViewBuilder(
+                  onSelected: onSelected, options: options);
             },
             onSelected: (dynamic selected) {
               // 都市名入力後、候補を選択した場合
-              setState(() {
-                _onSelected(geoData: selected);
-              });
+              _recreateTabs(geoData: selected);
             },
           ),
           // 右側のアイコン一覧
@@ -291,16 +209,12 @@ class MainAppState extends State<MainApp> {
                           separateCountryPos - 1);
                   newGeoData['country'] = revGeo.geoData['compound_code']
                       .substring(separateCountryPos + 1);
-                  setState(() {
-                    _onSelected(geoData: newGeoData);
-                  });
+                  _recreateTabs(geoData: newGeoData);
                 } catch (error) {
-                  setState(() {
-                    _onSelected(
-                        errorText:
-                            'Failed to retrieve city name from coordinates.');
-                    print(error.toString());
-                  });
+                  _recreateTabs(
+                    errorText: 'Failed to retrieve city name from coordinates.',
+                  );
+                  print(error.toString());
                 }
               },
               icon: Icon(
@@ -328,6 +242,92 @@ class MainAppState extends State<MainApp> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CustomOptionsViewBuilder extends StatefulWidget {
+  final Function(Map<String, dynamic>) onSelected;
+  final Iterable<Map<String, dynamic>> options;
+
+  const _CustomOptionsViewBuilder({
+    super.key,
+    required this.onSelected,
+    required this.options,
+  });
+
+  @override
+  _CustomOptionsViewBuilderState createState() =>
+      _CustomOptionsViewBuilderState();
+}
+
+class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
+  Map<String, dynamic>? hoveredOption;
+  Map<String, dynamic>? selectedOption;
+
+  @override
+  Widget build(BuildContext context) {
+    final optionList = widget.options.toList();
+    return ListView.builder(
+      itemCount: widget.options.length,
+      itemBuilder: (context, index) {
+        final option = optionList[index];
+        return MouseRegion(
+          onEnter: (_) {
+            // ホバー時の処理
+            setState(() {
+              hoveredOption = option;
+            });
+          },
+          onExit: (_) {
+            // ホバーが外れたときの処理
+            setState(() {
+              hoveredOption = null;
+            });
+          },
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedOption = option;
+              });
+              widget.onSelected(option);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              color: option == selectedOption
+                  ? Colors.blue.withOpacity(0.3)
+                  : hoveredOption == option
+                      ? Colors.grey.withOpacity(0.1)
+                      : Colors.white,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: option['name'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: option == selectedOption
+                            ? Colors.blue
+                            : Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ", ${option['admin1']}, ${option['country']}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: option == selectedOption
+                            ? Colors.blue
+                            : Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
