@@ -24,7 +24,7 @@ class GeoCoding {
 }
 
 Future<GeoCoding> fetchGeoCoding(String cityName) async {
-  final res = await http.get(Uri.parse('$geoCodingApiRoute?name=$cityName'));
+  final res = await http.get(Uri.parse('$geoCodingApiRoute?name=$cityName&count=5'));
   if (res.statusCode == 200) {
     return GeoCoding.fromJson(jsonDecode(res.body));
   } else {
