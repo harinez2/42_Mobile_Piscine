@@ -273,7 +273,11 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
         children: [
           Card(
             shadowColor: Colors.black,
-            // elevation: 1,
+            elevation: 1,
+            shape: RoundedRectangleBorder(
+              // Cardの角を丸めない
+              borderRadius: BorderRadius.circular(0),
+            ),
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: widget.options.length,
@@ -297,7 +301,10 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
                       setState(() {
                         selectedOption = option;
                       });
-                      widget.onSelected(option);
+                      // タップの描画が終わるまでわずかに待つ
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        widget.onSelected(option);
+                      });
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
