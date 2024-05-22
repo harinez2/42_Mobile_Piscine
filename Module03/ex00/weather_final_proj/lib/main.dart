@@ -297,7 +297,7 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
                       setState(() {
                         selectedOption = option;
                       });
-                      // widget.onSelected(option);
+                      widget.onSelected(option);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
