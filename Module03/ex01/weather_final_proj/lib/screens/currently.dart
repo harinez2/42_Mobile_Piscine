@@ -41,11 +41,30 @@ Wind speed: ${widget.forecast?.forecastData['current']['wind_speed_10m']}${widge
     }
 
     return Scaffold(
-      body: Center(
-        child: Text(
-          weatherText,
-          textAlign: TextAlign.center,
-          style: errorFlag ? const TextStyle(color: Colors.red) : null,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/background.jpg'),
+            fit: BoxFit.cover,
+            opacity: 0.2,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                weatherText,
+                textAlign: TextAlign.center,
+                style: errorFlag ? const TextStyle(color: Colors.red) : null,
+              ),
+              const Icon(
+                Icons.sunny,
+                color: Colors.pink,
+                size: 144.0,
+                semanticLabel: 'sunny',
+              ),
+            ],
+          ),
         ),
       ),
     );

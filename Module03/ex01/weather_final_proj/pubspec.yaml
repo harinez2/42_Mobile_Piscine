@@ -27,3 +27,5 @@ flutter:
     - family: Noto Sans JP
       fonts:
         - asset: fonts/NotoSansJP.ttf
+  assets:
+    - images/
