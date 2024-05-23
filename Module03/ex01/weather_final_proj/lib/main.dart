@@ -352,6 +352,7 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
           ),
         ),
         const Expanded(
+          // 入力候補Cardが縦に最大化しないよう、ダミーウィジェットを置く
           child: Scaffold(
             backgroundColor: Colors.transparent,
           ),
