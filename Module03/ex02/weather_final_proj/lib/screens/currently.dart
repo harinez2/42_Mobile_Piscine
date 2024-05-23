@@ -20,41 +20,82 @@ class CurrentlyTab extends StatefulWidget {
 class CurrentlyTabState extends State<CurrentlyTab> {
   @override
   Widget build(BuildContext context) {
-    String weatherText;
-    bool errorFlag = false;
-
-    if (widget.errorText != null) {
-      weatherText = widget.errorText!;
-      errorFlag = true;
-    } else if (widget.forecast != null) {
-      final String weatherString = getWeatherString(
-          widget.forecast?.forecastData['current']['weather_code']);
-      weatherText = """
-Weather: $weatherString
-City: ${widget.geoData['name']}
-Country: ${widget.geoData['country']}
-Temperature: ${widget.forecast?.forecastData['current']['temperature_2m']}${widget.forecast?.forecastData['current_units']['temperature_2m']}
-Wind speed: ${widget.forecast?.forecastData['current']['wind_speed_10m']}${widget.forecast?.forecastData['current_units']['wind_speed_10m']}
-            """;
-    } else {
-      weatherText = '';
+    // 初期表示 or エラーメッセージ
+    if (widget.errorText != null || widget.forecast == null) {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Text(
+            widget.errorText ?? '',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.red),
+          ),
+        ),
+      );
     }
 
+    final String weatherString = getWeatherString(
+        widget.forecast?.forecastData['current']['weather_code']);
+    final String cityName =
+        "${widget.geoData['name']}, ${widget.geoData['country']}";
+    final String currentDegree =
+        "${widget.forecast?.forecastData['current']['temperature_2m']}${widget.forecast?.forecastData['current_units']['temperature_2m']}";
+    final String windSpeed =
+        "${widget.forecast?.forecastData['current']['wind_speed_10m']}${widget.forecast?.forecastData['current_units']['wind_speed_10m']}";
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              weatherText,
+              weatherString,
               textAlign: TextAlign.center,
-              style: errorFlag ? const TextStyle(color: Colors.red) : null,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.blue,
+              ),
+            ),
+            Text(
+              cityName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 70,
+            ),
+            Text(
+              currentDegree,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 48,
+                color: Colors.orange,
+              ),
             ),
             const Icon(
               Icons.sunny,
               color: Colors.pink,
-              size: 144.0,
+              size: 100.0,
               semanticLabel: 'sunny',
+            ),
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.air,
+                    color: Colors.blue,
+                    size: 16.0,
+                    semanticLabel: 'wind',
+                  ),
+                  Text(
+                    windSpeed,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
