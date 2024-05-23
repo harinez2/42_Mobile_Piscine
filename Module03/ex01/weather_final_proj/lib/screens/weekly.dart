@@ -51,6 +51,7 @@ Country: ${widget.geoData['country']}
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
         child: Text(
           weatherText,

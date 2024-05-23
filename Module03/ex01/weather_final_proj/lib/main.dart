@@ -101,145 +101,159 @@ class MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: 'Noto Sans JP'),
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blueGrey[700],
-          toolbarHeight: 80.0,
-          // 左側のアイコン
-          leading: Icon(Icons.search, color: Colors.blueGrey.shade200),
-          // タイトルテキスト
-          title: Autocomplete<Map<String, dynamic>>(
-            displayStringForOption: (e) =>
-                "${e['name']}, ${e['admin1']}, ${e['country']}",
-            fieldViewBuilder:
-                (context, textEditingController, focusNode, onFieldSubmitted) {
-              return TextField(
-                controller: textEditingController,
-                focusNode: focusNode,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  labelText: 'Search location...',
-                  labelStyle: TextStyle(
-                    color: Colors.blueGrey.shade500,
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('images/background.jpg'),
+          fit: BoxFit.cover,
+          opacity: 0.4,
+        ),
+      ),
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: 'Noto Sans JP'),
+        home: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            toolbarHeight: 80.0,
+            // 左側のアイコン
+            leading: Icon(Icons.search, color: Colors.blueGrey.shade800),
+            // タイトルテキスト
+            title: Autocomplete<Map<String, dynamic>>(
+              displayStringForOption: (e) =>
+                  "${e['name']}, ${e['admin1']}, ${e['country']}",
+              fieldViewBuilder: (context, textEditingController, focusNode,
+                  onFieldSubmitted) {
+                return TextField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Search location...',
+                    labelStyle: TextStyle(
+                      color: Colors.blueGrey.shade800,
+                    ),
+                    errorText: _networkError
+                        ? 'Network error, please check the network connection.'
+                        : null,
                   ),
-                  errorText: _networkError
-                      ? 'Network error, please check the network connection.'
-                      : null,
-                ),
-                style: TextStyle(
-                  color: Colors.blueGrey.shade200,
-                ),
-                onSubmitted: (value) async {
-                  // 都市名入力してEnterを押した場合
-                  try {
-                    GeoCoding geo = await fetchGeoCoding(value);
-                    if (geo.geoData.isEmpty) {
+                  style: TextStyle(
+                    color: Colors.blueGrey.shade800,
+                  ),
+                  onSubmitted: (value) async {
+                    // 都市名入力してEnterを押した場合
+                    try {
+                      GeoCoding geo = await fetchGeoCoding(value);
+                      if (geo.geoData.isEmpty) {
+                        _recreateTabs(
+                          errorText: 'Specified city name does not exist.',
+                        );
+                      } else {
+                        _recreateTabs(geoData: geo.geoData.first);
+                      }
+                    } catch (error) {
                       _recreateTabs(
-                        errorText: 'Specified city name does not exist.',
+                        errorText:
+                            'Failed to convert city name to coordinates.',
                       );
-                    } else {
-                      _recreateTabs(geoData: geo.geoData.first);
+                      print(error.toString());
                     }
+                  },
+                );
+              },
+              optionsBuilder: (TextEditingValue textEditingValue) async {
+                setState(() {
+                  _networkError = false;
+                });
+                if (textEditingValue.text.length < 3) {
+                  return const Iterable.empty();
+                } else {
+                  _currentQuery = textEditingValue.text;
+                  GeoCoding? ret;
+                  try {
+                    ret = await _debounceFetchGeoCoding(textEditingValue.text);
+                  } catch (error) {
+                    setState(() {
+                      _networkError = true;
+                    });
+                  }
+                  if (_currentQuery != textEditingValue.text) {
+                    return _lastOptions;
+                  }
+                  if (ret != null) {
+                    _lastOptions = ret.geoData;
+                  }
+                  return _lastOptions;
+                }
+              },
+              optionsViewBuilder: (context, onSelected, options) {
+                return _CustomOptionsViewBuilder(
+                    onSelected: onSelected, options: options);
+              },
+              onSelected: (dynamic selected) {
+                // 都市名入力後、候補を選択した場合
+                _recreateTabs(geoData: selected);
+              },
+            ),
+            // 右側のアイコン一覧
+            actions: <Widget>[
+              VerticalDivider(
+                color: Colors.blueGrey.shade800,
+                thickness: 2,
+                indent: 10,
+                endIndent: 10,
+              ),
+              IconButton(
+                onPressed: () async {
+                  try {
+                    Position position = await GeoLocator.determinePosition();
+                    ReverseGeoCoding revGeo = await fetchReverseGeoCoding(
+                        position.latitude.toString(),
+                        position.longitude.toString());
+                    Map<String, dynamic> newGeoData =
+                        GeoLocator.toMap(position);
+                    final int separateCountryPos =
+                        revGeo.geoData['compound_code'].lastIndexOf(' ');
+                    newGeoData['name'] = revGeo.geoData['compound_code']
+                        .substring(
+                            revGeo.geoData['compound_code'].indexOf(' ') + 1,
+                            separateCountryPos - 1);
+                    newGeoData['country'] = revGeo.geoData['compound_code']
+                        .substring(separateCountryPos + 1);
+                    _recreateTabs(geoData: newGeoData);
                   } catch (error) {
                     _recreateTabs(
-                      errorText: 'Failed to convert city name to coordinates.',
+                      errorText:
+                          'Failed to retrieve city name from coordinates.',
                     );
                     print(error.toString());
                   }
                 },
-              );
-            },
-            optionsBuilder: (TextEditingValue textEditingValue) async {
-              setState(() {
-                _networkError = false;
-              });
-              if (textEditingValue.text.length < 3) {
-                return const Iterable.empty();
-              } else {
-                _currentQuery = textEditingValue.text;
-                GeoCoding? ret;
-                try {
-                  ret = await _debounceFetchGeoCoding(textEditingValue.text);
-                } catch (error) {
-                  setState(() {
-                    _networkError = true;
-                  });
-                }
-                if (_currentQuery != textEditingValue.text) {
-                  return _lastOptions;
-                }
-                if (ret != null) {
-                  _lastOptions = ret.geoData;
-                }
-                return _lastOptions;
-              }
-            },
-            optionsViewBuilder: (context, onSelected, options) {
-              return _CustomOptionsViewBuilder(
-                  onSelected: onSelected, options: options);
-            },
-            onSelected: (dynamic selected) {
-              // 都市名入力後、候補を選択した場合
-              _recreateTabs(geoData: selected);
-            },
-          ),
-          // 右側のアイコン一覧
-          actions: <Widget>[
-            VerticalDivider(
-              color: Colors.blueGrey.shade200,
-              thickness: 2,
-              indent: 10,
-              endIndent: 10,
-            ),
-            IconButton(
-              onPressed: () async {
-                try {
-                  Position position = await GeoLocator.determinePosition();
-                  ReverseGeoCoding revGeo = await fetchReverseGeoCoding(
-                      position.latitude.toString(),
-                      position.longitude.toString());
-                  Map<String, dynamic> newGeoData = GeoLocator.toMap(position);
-                  final int separateCountryPos =
-                      revGeo.geoData['compound_code'].lastIndexOf(' ');
-                  newGeoData['name'] = revGeo.geoData['compound_code']
-                      .substring(
-                          revGeo.geoData['compound_code'].indexOf(' ') + 1,
-                          separateCountryPos - 1);
-                  newGeoData['country'] = revGeo.geoData['compound_code']
-                      .substring(separateCountryPos + 1);
-                  _recreateTabs(geoData: newGeoData);
-                } catch (error) {
-                  _recreateTabs(
-                    errorText: 'Failed to retrieve city name from coordinates.',
-                  );
-                  print(error.toString());
-                }
-              },
-              icon: Icon(
-                Icons.assistant_navigation,
-                color: Colors.blueGrey.shade200,
+                icon: Icon(
+                  Icons.assistant_navigation,
+                  color: Colors.blueGrey.shade800,
+                ),
               ),
-            ),
-          ],
-        ),
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
-          children: _widgetOptions,
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: _onDestinationSelected,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-          destinations: const <NavigationDestination>[
-            NavigationDestination(
-                icon: Icon(Icons.settings), label: 'Currently'),
-            NavigationDestination(icon: Icon(Icons.event), label: 'Today'),
-            NavigationDestination(
-                icon: Icon(Icons.date_range), label: 'Weekly'),
-          ],
+            ],
+          ),
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: _widgetOptions,
+          ),
+          bottomNavigationBar: NavigationBar(
+            backgroundColor: Colors.transparent,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: _onDestinationSelected,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            destinations: const <NavigationDestination>[
+              NavigationDestination(
+                  icon: Icon(Icons.settings), label: 'Currently'),
+              NavigationDestination(icon: Icon(Icons.event), label: 'Today'),
+              NavigationDestination(
+                  icon: Icon(Icons.date_range), label: 'Weekly'),
+            ],
+          ),
         ),
       ),
     );
