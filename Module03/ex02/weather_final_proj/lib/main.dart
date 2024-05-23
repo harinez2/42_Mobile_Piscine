@@ -283,6 +283,7 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
   Widget build(BuildContext context) {
     final optionList = widget.options.toList();
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Card(
           shadowColor: Colors.black,
@@ -349,12 +350,6 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
                 ),
               );
             },
-          ),
-        ),
-        const Expanded(
-          // 入力候補Cardが縦に最大化しないよう、ダミーウィジェットを置く
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
           ),
         ),
       ],
