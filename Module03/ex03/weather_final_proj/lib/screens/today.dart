@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../components/weather_forecast_api.dart';
+import 'errorpage.dart';
 
 class TodayTab extends StatefulWidget {
   final Map<String, dynamic> geoData;
@@ -37,40 +39,68 @@ class TodayTabState extends State<TodayTab> {
 
   @override
   Widget build(BuildContext context) {
-    String weatherText;
-    bool errorFlag = false;
+    // 初期表示 or エラーメッセージ
+    if (widget.errorText != null || widget.forecast == null) {
+      return ErrorDisplay(errorText: widget.errorText);
+    }
 
-    if (widget.errorText != null) {
-      weatherText = widget.errorText!;
-      errorFlag = true;
-    } else if (widget.forecast != null) {
-      final String weatherString = getWeatherString(
-          widget.forecast?.forecastData['current']['weather_code']);
-      weatherText = """
-Weather: $weatherString
-City: ${widget.geoData['name']}
-Country: ${widget.geoData['country']}
-""";
-      for (int i = 0; i < 24; i++) {
-        weatherText += sprintf("%02i:00", [i]);
-        weatherText += "          ";
-        weatherText +=
-            "${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}";
-        weatherText += "          ";
-        weatherText +=
-            "${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}\n";
-      }
-    } else {
-      weatherText = '';
+    final String weatherString = getWeatherString(
+        widget.forecast?.forecastData['current']['weather_code']);
+    final String cityName =
+        "${widget.geoData['name']}, ${widget.geoData['country']}";
+
+    String weatherText = '';
+    for (int i = 0; i < 24; i++) {
+      weatherText += sprintf("%02i:00", [i]);
+      weatherText += "          ";
+      weatherText +=
+          "${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}";
+      weatherText += "          ";
+      weatherText +=
+          "${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}\n";
     }
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        child: Text(
-          weatherText,
-          textAlign: TextAlign.center,
-          style: errorFlag ? const TextStyle(color: Colors.red) : null,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              weatherString,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.blue,
+              ),
+            ),
+            Text(
+              cityName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            AspectRatio(
+              aspectRatio: 2.5,
+              child: LineChart(
+                LineChartData(
+                  lineBarsData: [
+                    LineChartBarData(spots: [
+                      FlSpot(1.0, 1.0),
+                      FlSpot(2.0, 3.1),
+                    ]),
+                  ],
+                ),
+                // swapAnimationDuration: Duration(milliseconds: 150),
+                // swapAnimationCurve: Curves.linear,
+              ),
+            ),
+          ],
         ),
       ),
     );

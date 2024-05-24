@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/weather_forecast_api.dart';
+import 'errorpage.dart';
 
 class CurrentlyTab extends StatefulWidget {
   final Map<String, dynamic> geoData;
@@ -22,16 +23,7 @@ class CurrentlyTabState extends State<CurrentlyTab> {
   Widget build(BuildContext context) {
     // 初期表示 or エラーメッセージ
     if (widget.errorText != null || widget.forecast == null) {
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Text(
-            widget.errorText ?? '',
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.red),
-          ),
-        ),
-      );
+      return ErrorDisplay(errorText: widget.errorText);
     }
 
     final String weatherString = getWeatherString(
