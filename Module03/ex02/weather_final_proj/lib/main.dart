@@ -106,7 +106,7 @@ class MainAppState extends State<MainApp> {
         image: DecorationImage(
           image: AssetImage('images/background.jpg'),
           fit: BoxFit.cover,
-          opacity: 0.4,
+          opacity: 0.2,
         ),
       ),
       child: MaterialApp(

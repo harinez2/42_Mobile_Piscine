@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -62,5 +63,108 @@ String getWeatherString(int code) {
     return 'Thunderstorm with slight and heavy hail';
   } else {
     return 'Undefined';
+  }
+}
+
+const iconSize = 100.0;
+Icon getWeatherIcon(int code) {
+  if (code == 0) {
+    return const Icon(
+      Icons.sunny,
+      color: Colors.pink,
+      size: iconSize,
+      semanticLabel: 'Clear sky',
+    );
+  } else if (code == 1 || code == 2 || code == 3) {
+    return const Icon(
+      Icons.foggy,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Mainly clear, partly cloudy, and overcast',
+    );
+  } else if (code == 45 || code == 48) {
+    return const Icon(
+      Icons.foggy,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Fog and depositing rime fog',
+    );
+  } else if (code == 51 || code == 53 || code == 55) {
+    return const Icon(
+      Icons.ac_unit,
+      color: Colors.lightBlue,
+      size: iconSize,
+      semanticLabel: 'Drizzle: Light, moderate, and dense intensity',
+    );
+  } else if (code == 56 || code == 57) {
+    return const Icon(
+      Icons.ac_unit,
+      color: Colors.lightBlue,
+      size: iconSize,
+      semanticLabel: 'Freezing Drizzle: Light and dense intensity',
+    );
+  } else if (code == 61 || code == 63 || code == 65) {
+    return const Icon(
+      Icons.umbrella,
+      color: Colors.blue,
+      size: iconSize,
+      semanticLabel: 'Rain: Slight, moderate and heavy intensity',
+    );
+  } else if (code == 66 || code == 67) {
+    return const Icon(
+      Icons.umbrella,
+      color: Colors.blue,
+      size: iconSize,
+      semanticLabel: 'Freezing Rain: Light and heavy intensity',
+    );
+  } else if (code == 71 || code == 73 || code == 75) {
+    return const Icon(
+      Icons.cloudy_snowing,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Snow fall: Slight, moderate, and heavy intensity',
+    );
+  } else if (code == 77) {
+    return const Icon(
+      Icons.snowing,
+      color: Colors.lightBlue,
+      size: iconSize,
+      semanticLabel: 'Snow grains',
+    );
+  } else if (code == 80 || code == 81 || code == 82) {
+    return const Icon(
+      Icons.umbrella,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Rain showers: Slight, moderate, and violent',
+    );
+  } else if (code == 85 || code == 86) {
+    return const Icon(
+      Icons.cloudy_snowing,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Snow showers slight and heavy',
+    );
+  } else if (code == 95) {
+    return const Icon(
+      Icons.thunderstorm,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Thunderstorm: Slight or moderate',
+    );
+  } else if (code == 96 || code == 99) {
+    return const Icon(
+      Icons.thunderstorm,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Thunderstorm with slight and heavy hail',
+    );
+  } else {
+    return const Icon(
+      Icons.check_box_outline_blank,
+      color: Colors.grey,
+      size: iconSize,
+      semanticLabel: 'Undefined',
+    );
   }
 }

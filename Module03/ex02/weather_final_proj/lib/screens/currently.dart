@@ -74,12 +74,8 @@ class CurrentlyTabState extends State<CurrentlyTab> {
                 color: Colors.orange,
               ),
             ),
-            const Icon(
-              Icons.sunny,
-              color: Colors.pink,
-              size: 100.0,
-              semanticLabel: 'sunny',
-            ),
+            getWeatherIcon(
+                widget.forecast?.forecastData['current']['weather_code']),
             Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
