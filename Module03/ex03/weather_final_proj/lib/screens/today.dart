@@ -49,15 +49,15 @@ class TodayTabState extends State<TodayTab> {
     final String cityName =
         "${widget.geoData['name']}, ${widget.geoData['country']}";
 
-    String weatherText = '';
+    List<FlSpot> temperature = [];
     for (int i = 0; i < 24; i++) {
-      weatherText += sprintf("%02i:00", [i]);
-      weatherText += "          ";
-      weatherText +=
-          "${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}";
-      weatherText += "          ";
-      weatherText +=
-          "${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}\n";
+      temperature.add(FlSpot(i.toDouble(),
+          widget.forecast?.forecastData['hourly']['temperature_2m'][i]));
+      // sprintf("%02i:00", [i]);
+      // ${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}
+      // ${widget.forecast?.forecastData['hourly_units']['temperature_2m']}
+      // ${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}
+      // ${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}
     }
 
     return Scaffold(
@@ -90,10 +90,7 @@ class TodayTabState extends State<TodayTab> {
               child: LineChart(
                 LineChartData(
                   lineBarsData: [
-                    LineChartBarData(spots: [
-                      FlSpot(1.0, 1.0),
-                      FlSpot(2.0, 3.1),
-                    ]),
+                    LineChartBarData(spots: temperature),
                   ],
                 ),
                 // swapAnimationDuration: Duration(milliseconds: 150),
