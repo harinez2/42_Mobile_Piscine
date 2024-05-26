@@ -50,9 +50,17 @@ class TodayTabState extends State<TodayTab> {
         "${widget.geoData['name']}, ${widget.geoData['country']}";
 
     List<FlSpot> temperature = [];
+    double minY = 0;
+    double maxY = 0;
     for (int i = 0; i < 24; i++) {
       temperature.add(FlSpot(i.toDouble(),
           widget.forecast?.forecastData['hourly']['temperature_2m'][i]));
+      if (i == 0 || minY > widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
+        minY = widget.forecast?.forecastData['hourly']['temperature_2m'][i];
+      }
+      if (i == 0 || maxY < widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
+        maxY = widget.forecast?.forecastData['hourly']['temperature_2m'][i];
+      }
       // sprintf("%02i:00", [i]);
       // ${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}
       // ${widget.forecast?.forecastData['hourly_units']['temperature_2m']}
@@ -89,6 +97,16 @@ class TodayTabState extends State<TodayTab> {
               aspectRatio: 2.5,
               child: LineChart(
                 LineChartData(
+                  titlesData: const FlTitlesData(
+                    topTitles: AxisTitles(
+                      axisNameWidget: Text(
+                        'Today temperatures',
+                        style: TextStyle(height: -2.0),
+                      ),
+                    ),
+                  ),
+                  minY: (minY - 1).round().toDouble(),
+                  maxY: (maxY + 1).round().toDouble(),
                   lineBarsData: [
                     LineChartBarData(spots: temperature),
                   ],
