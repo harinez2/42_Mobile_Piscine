@@ -55,10 +55,12 @@ class TodayTabState extends State<TodayTab> {
     for (int i = 0; i < 24; i++) {
       temperature.add(FlSpot(i.toDouble(),
           widget.forecast?.forecastData['hourly']['temperature_2m'][i]));
-      if (i == 0 || minY > widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
+      if (i == 0 ||
+          minY > widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
         minY = widget.forecast?.forecastData['hourly']['temperature_2m'][i];
       }
-      if (i == 0 || maxY < widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
+      if (i == 0 ||
+          maxY < widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
         maxY = widget.forecast?.forecastData['hourly']['temperature_2m'][i];
       }
       // sprintf("%02i:00", [i]);
@@ -94,19 +96,54 @@ class TodayTabState extends State<TodayTab> {
               height: 40,
             ),
             AspectRatio(
-              aspectRatio: 2.5,
+              aspectRatio: 2.1,
               child: LineChart(
                 LineChartData(
-                  titlesData: const FlTitlesData(
-                    topTitles: AxisTitles(
+                  titlesData: FlTitlesData(
+                    topTitles: const AxisTitles(
                       axisNameWidget: Text(
                         'Today temperatures',
                         style: TextStyle(height: -2.0),
                       ),
                     ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                        getTitlesWidget: (value, meta) => SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            "${value.toInt().toString()}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}",
+                          ),
+                        ),
+                      ),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                        getTitlesWidget: (value, meta) {
+                          final int hours = value.toInt();
+                          return SideTitleWidget(
+                            axisSide: meta.axisSide,
+                            child: hours % 2 == 0
+                                ? Text(sprintf("%02i:00", [hours]))
+                                : const Text(''),
+                          );
+                        },
+                      ),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 10,
+                        getTitlesWidget: (value, meta) => const Text(''),
+                      ),
+                    ),
                   ),
                   minY: (minY - 1).round().toDouble(),
                   maxY: (maxY + 1).round().toDouble(),
+                  borderData: FlBorderData(),
                   lineBarsData: [
                     LineChartBarData(spots: temperature),
                   ],
