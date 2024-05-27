@@ -52,6 +52,7 @@ class TodayTabState extends State<TodayTab> {
     List<FlSpot> temperature = [];
     double minY = 0;
     double maxY = 0;
+    List<Widget> hourlyWidgets = [];
     for (int i = 0; i < 24; i++) {
       temperature.add(FlSpot(i.toDouble(),
           widget.forecast?.forecastData['hourly']['temperature_2m'][i]));
@@ -63,11 +64,37 @@ class TodayTabState extends State<TodayTab> {
           maxY < widget.forecast?.forecastData['hourly']['temperature_2m'][i]) {
         maxY = widget.forecast?.forecastData['hourly']['temperature_2m'][i];
       }
-      // sprintf("%02i:00", [i]);
-      // ${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}
-      // ${widget.forecast?.forecastData['hourly_units']['temperature_2m']}
-      // ${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}
-      // ${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}
+      hourlyWidgets.add(
+        Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text(sprintf("%02i:00", [i])),
+              getWeatherIcon(
+                  widget.forecast?.forecastData['hourly']['weather_code'][i],
+                  iconSize: 32.0),
+              Text(
+                "${widget.forecast?.forecastData['hourly']['temperature_2m'][i]}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}",
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.air,
+                    color: Colors.blue,
+                    size: 16.0,
+                    semanticLabel: 'wind',
+                  ),
+                  Text(
+                    "${widget.forecast?.forecastData['hourly']['wind_speed_10m'][i]}${widget.forecast?.forecastData['hourly_units']['wind_speed_10m']}",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return Scaffold(
@@ -151,6 +178,13 @@ class TodayTabState extends State<TodayTab> {
                 // swapAnimationDuration: Duration(milliseconds: 150),
                 // swapAnimationCurve: Curves.linear,
               ),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: hourlyWidgets),
             ),
           ],
         ),
