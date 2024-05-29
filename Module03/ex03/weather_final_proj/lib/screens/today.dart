@@ -183,9 +183,12 @@ class TodayTabState extends State<TodayTab> {
               const SizedBox(
                 height: 40,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(children: hourlyWidgets),
+              Scrollbar(
+                child: SingleChildScrollView(
+                  primary: true,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: hourlyWidgets),
+                ),
               ),
             ],
           ),
