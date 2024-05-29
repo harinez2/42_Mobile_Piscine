@@ -100,93 +100,95 @@ class TodayTabState extends State<TodayTab> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              weatherString,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.blue,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                weatherString,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue,
+                ),
               ),
-            ),
-            Text(
-              cityName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
+              Text(
+                cityName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            AspectRatio(
-              aspectRatio: 2.1,
-              child: LineChart(
-                LineChartData(
-                  titlesData: FlTitlesData(
-                    topTitles: const AxisTitles(
-                      axisNameWidget: Text(
-                        'Today temperatures',
-                        style: TextStyle(height: -2.0),
+              const SizedBox(
+                height: 40,
+              ),
+              AspectRatio(
+                aspectRatio: 2.1,
+                child: LineChart(
+                  LineChartData(
+                    titlesData: FlTitlesData(
+                      topTitles: const AxisTitles(
+                        axisNameWidget: Text(
+                          'Today temperatures',
+                          style: TextStyle(height: -2.0),
+                        ),
                       ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        getTitlesWidget: (value, meta) => SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          child: Text(
-                            "${value.toInt().toString()}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}",
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) => SideTitleWidget(
+                            axisSide: meta.axisSide,
+                            child: Text(
+                              "${value.toInt().toString()}${widget.forecast?.forecastData['hourly_units']['temperature_2m']}",
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        getTitlesWidget: (value, meta) {
-                          final int hours = value.toInt();
-                          return SideTitleWidget(
-                            axisSide: meta.axisSide,
-                            child: hours % 2 == 0
-                                ? Text(sprintf("%02i:00", [hours]))
-                                : const Text(''),
-                          );
-                        },
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) {
+                            final int hours = value.toInt();
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              child: hours % 2 == 0
+                                  ? Text(sprintf("%02i:00", [hours]))
+                                  : const Text(''),
+                            );
+                          },
+                        ),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 10,
+                          getTitlesWidget: (value, meta) => const Text(''),
+                        ),
                       ),
                     ),
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 10,
-                        getTitlesWidget: (value, meta) => const Text(''),
-                      ),
-                    ),
+                    minY: (minY - 1).round().toDouble(),
+                    maxY: (maxY + 1).round().toDouble(),
+                    borderData: FlBorderData(),
+                    lineBarsData: [
+                      LineChartBarData(spots: temperature),
+                    ],
                   ),
-                  minY: (minY - 1).round().toDouble(),
-                  maxY: (maxY + 1).round().toDouble(),
-                  borderData: FlBorderData(),
-                  lineBarsData: [
-                    LineChartBarData(spots: temperature),
-                  ],
+                  // swapAnimationDuration: Duration(milliseconds: 150),
+                  // swapAnimationCurve: Curves.linear,
                 ),
-                // swapAnimationDuration: Duration(milliseconds: 150),
-                // swapAnimationCurve: Curves.linear,
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(children: hourlyWidgets),
-            ),
-          ],
+              const SizedBox(
+                height: 40,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: hourlyWidgets),
+              ),
+            ],
+          ),
         ),
       ),
     );

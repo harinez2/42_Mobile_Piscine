@@ -37,55 +37,57 @@ class CurrentlyTabState extends State<CurrentlyTab> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              weatherString,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.blue,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                weatherString,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue,
+                ),
               ),
-            ),
-            Text(
-              cityName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
+              Text(
+                cityName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 70,
-            ),
-            Text(
-              currentDegree,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 48,
-                color: Colors.orange,
+              const SizedBox(
+                height: 70,
               ),
-            ),
-            getWeatherIcon(
-                widget.forecast?.forecastData['current']['weather_code']),
-            Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.air,
-                    color: Colors.blue,
-                    size: 16.0,
-                    semanticLabel: 'wind',
-                  ),
-                  Text(
-                    windSpeed,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+              Text(
+                currentDegree,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 48,
+                  color: Colors.orange,
+                ),
               ),
-            ),
-          ],
+              getWeatherIcon(
+                  widget.forecast?.forecastData['current']['weather_code']),
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.air,
+                      color: Colors.blue,
+                      size: 16.0,
+                      semanticLabel: 'wind',
+                    ),
+                    Text(
+                      windSpeed,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
