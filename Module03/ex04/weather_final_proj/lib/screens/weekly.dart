@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../components/weather_forecast_api.dart';
+import 'errorpage.dart';
 
 class WeeklyTab extends StatefulWidget {
   final Map<String, dynamic> geoData;
@@ -22,41 +25,164 @@ class WeeklyTabState extends State<WeeklyTab> {
 
   @override
   Widget build(BuildContext context) {
-    String weatherText;
-    bool errorFlag = false;
+    // 初期表示 or エラーメッセージ
+    if (widget.errorText != null || widget.forecast == null) {
+      return ErrorDisplay(errorText: widget.errorText);
+    }
 
-    if (widget.errorText != null) {
-      weatherText = widget.errorText!;
-      errorFlag = true;
-    } else if (widget.forecast != null) {
-      weatherText = """
-City: ${widget.geoData['name']}
-Country: ${widget.geoData['country']}
-""";
-      for (int i = 0; i < 7; i++) {
-        weatherText += "${widget.forecast?.forecastData['daily']['time'][i]}";
-        weatherText += "          ";
-        weatherText +=
-            "${widget.forecast?.forecastData['daily']['temperature_2m_min'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_min']}";
-        weatherText += "          ";
-        weatherText +=
-            "${widget.forecast?.forecastData['daily']['temperature_2m_max'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']}";
-        weatherText += "          ";
-        weatherText += getWeatherString(
-            widget.forecast?.forecastData['daily']['weather_code'][i]);
-        weatherText += "\n";
+    final String weatherString = getWeatherString(
+        widget.forecast?.forecastData['current']['weather_code']);
+    final String cityName =
+        "${widget.geoData['name']}, ${widget.geoData['country']}";
+
+    List<FlSpot> temperatureMin = [];
+    List<FlSpot> temperatureMax = [];
+    double minY = 0;
+    double maxY = 0;
+    List<Widget> dailyWidgets = [];
+    for (int i = 0; i < 7; i++) {
+      temperatureMin.add(FlSpot(i.toDouble(),
+          widget.forecast?.forecastData['daily']['temperature_2m_min'][i]));
+      if (i == 0 ||
+          minY >
+              widget.forecast?.forecastData['daily']['temperature_2m_min'][i]) {
+        minY = widget.forecast?.forecastData['daily']['temperature_2m_min'][i];
       }
-    } else {
-      weatherText = '';
+      if (i == 0 ||
+          maxY <
+              widget.forecast?.forecastData['daily']['temperature_2m_min'][i]) {
+        maxY = widget.forecast?.forecastData['daily']['temperature_2m_min'][i];
+      }
+      temperatureMax.add(FlSpot(i.toDouble(),
+          widget.forecast?.forecastData['daily']['temperature_2m_max'][i]));
+      if (i == 0 ||
+          minY >
+              widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
+        minY = widget.forecast?.forecastData['daily']['temperature_2m_max'][i];
+      }
+      if (i == 0 ||
+          maxY <
+              widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
+        maxY = widget.forecast?.forecastData['daily']['temperature_2m_max'][i];
+      }
+      dailyWidgets.add(
+        Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text(widget.forecast?.forecastData['daily']['time'][i]),
+              getWeatherIcon(
+                  widget.forecast?.forecastData['daily']['weather_code'][i],
+                  iconSize: 32.0),
+              Text(
+                "${widget.forecast?.forecastData['daily']['temperature_2m_max'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']}max",
+              ),
+              Text(
+                "${widget.forecast?.forecastData['daily']['temperature_2m_min'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_min']}min",
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        child: Text(
-          weatherText,
-          textAlign: TextAlign.center,
-          style: errorFlag ? const TextStyle(color: Colors.red) : null,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                weatherString,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue,
+                ),
+              ),
+              Text(
+                cityName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              AspectRatio(
+                aspectRatio: 2.1,
+                child: LineChart(
+                  LineChartData(
+                    titlesData: FlTitlesData(
+                      topTitles: const AxisTitles(
+                        axisNameWidget: Text(
+                          'Weekly temperatures',
+                          style: TextStyle(height: -2.0),
+                        ),
+                      ),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) => SideTitleWidget(
+                            axisSide: meta.axisSide,
+                            child: Text(
+                              "${value.toInt().toString()}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']}",
+                            ),
+                          ),
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) {
+                            final int hours = value.toInt();
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              child: hours % 2 == 0
+                                  ? Text(sprintf("%02i:00", [hours]))
+                                  : const Text(''),
+                            );
+                          },
+                        ),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 10,
+                          getTitlesWidget: (value, meta) => const Text(''),
+                        ),
+                      ),
+                    ),
+                    minY: (minY - 1).round().toDouble(),
+                    maxY: (maxY + 1).round().toDouble(),
+                    borderData: FlBorderData(),
+                    lineBarsData: [
+                      LineChartBarData(spots: temperatureMax),
+                      LineChartBarData(spots: temperatureMin),
+                    ],
+                  ),
+                  // swapAnimationDuration: Duration(milliseconds: 150),
+                  // swapAnimationCurve: Curves.linear,
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Scrollbar(
+                child: SingleChildScrollView(
+                  primary: true,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: dailyWidgets),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

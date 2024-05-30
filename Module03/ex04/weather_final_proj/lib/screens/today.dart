@@ -23,20 +23,6 @@ class TodayTab extends StatefulWidget {
 class TodayTabState extends State<TodayTab> {
   WeatherForecast? forecast;
 
-  Future<WeatherForecast?> getForecast() async {
-    try {
-      if (widget.geoData != {}) {
-        forecast = await fetchForecastCurrent(
-            widget.geoData['latitude'], widget.geoData['longitude']);
-        return forecast;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // 初期表示 or エラーメッセージ
