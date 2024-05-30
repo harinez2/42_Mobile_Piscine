@@ -188,6 +188,16 @@ class WeeklyTabState extends State<WeeklyTab> {
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLegendWidget(
+                      color: Colors.blue, text: 'Min temperature'),
+                  const SizedBox(width: 20),
+                  _buildLegendWidget(
+                      color: Colors.orange, text: 'Max temperature'),
+                ],
+              ),
               const SizedBox(
                 height: 40,
               ),
@@ -204,4 +214,18 @@ class WeeklyTabState extends State<WeeklyTab> {
       ),
     );
   }
+}
+
+Widget _buildLegendWidget({required Color color, required String text}) {
+  return Row(
+    children: [
+      Container(
+        width: 16,
+        height: 16,
+        color: color,
+      ),
+      const SizedBox(width: 8),
+      Text(text),
+    ],
+  );
 }
