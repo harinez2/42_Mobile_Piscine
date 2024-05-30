@@ -76,10 +76,15 @@ class WeeklyTabState extends State<WeeklyTab> {
                   iconSize: 32.0),
               Text(
                 "${widget.forecast?.forecastData['daily']['temperature_2m_max'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']}max",
+                style: const TextStyle(
+                  color: Colors.orange,
+                ),
               ),
               Text(
                 "${widget.forecast?.forecastData['daily']['temperature_2m_min'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_min']}min",
-                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
               ),
             ],
           ),
@@ -141,11 +146,15 @@ class WeeklyTabState extends State<WeeklyTab> {
                           showTitles: true,
                           reservedSize: 40,
                           getTitlesWidget: (value, meta) {
-                            final int hours = value.toInt();
+                            DateTime date = DateTime.parse(widget.forecast
+                                ?.forecastData['daily']['time'][value.toInt()]);
                             return SideTitleWidget(
                               axisSide: meta.axisSide,
-                              child: hours % 2 == 0
-                                  ? Text(sprintf("%02i:00", [hours]))
+                              fitInside: SideTitleFitInsideData.fromTitleMeta(
+                                  meta,
+                                  distanceFromEdge: 0),
+                              child: value == value.toInt()
+                                  ? Text('${date.month}/${date.day}')
                                   : const Text(''),
                             );
                           },
@@ -159,16 +168,19 @@ class WeeklyTabState extends State<WeeklyTab> {
                         ),
                       ),
                     ),
+                    gridData: const FlGridData(
+                      verticalInterval: 1.0,
+                    ),
                     minY: (minY - 1).round().toDouble(),
                     maxY: (maxY + 1).round().toDouble(),
+                    minX: -0.3,
+                    maxX: 6.3,
                     borderData: FlBorderData(),
                     lineBarsData: [
                       LineChartBarData(spots: temperatureMax),
                       LineChartBarData(spots: temperatureMin),
                     ],
                   ),
-                  // swapAnimationDuration: Duration(milliseconds: 150),
-                  // swapAnimationCurve: Curves.linear,
                 ),
               ),
               const SizedBox(
