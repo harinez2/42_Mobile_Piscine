@@ -133,7 +133,7 @@ Icon getWeatherIcon(int code, {double iconSize = 100.0}) {
   } else if (code == 80 || code == 81 || code == 82) {
     return Icon(
       Icons.umbrella,
-      color: Colors.grey,
+      color: Colors.blue,
       size: iconSize,
       semanticLabel: 'Rain showers: Slight, moderate, and violent',
     );
