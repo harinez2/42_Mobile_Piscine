@@ -74,13 +74,13 @@ class WeeklyTabState extends State<WeeklyTab> {
                   widget.forecast?.forecastData['daily']['weather_code'][i],
                   iconSize: 32.0),
               Text(
-                "${widget.forecast?.forecastData['daily']['temperature_2m_max'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']}max",
+                "${widget.forecast?.forecastData['daily']['temperature_2m_max'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_max']} max",
                 style: const TextStyle(
                   color: Colors.orange,
                 ),
               ),
               Text(
-                "${widget.forecast?.forecastData['daily']['temperature_2m_min'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_min']}min",
+                "${widget.forecast?.forecastData['daily']['temperature_2m_min'][i]}${widget.forecast?.forecastData['daily_units']['temperature_2m_min']} min",
                 style: const TextStyle(
                   color: Colors.blue,
                 ),
