@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sprintf/sprintf.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../components/weather_forecast_api.dart';
 import 'errorpage.dart';
@@ -63,12 +62,14 @@ class WeeklyTabState extends State<WeeklyTab> {
           widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
         maxY = widget.forecast?.forecastData['daily']['temperature_2m_max'][i];
       }
+      DateTime date =
+          DateTime.parse(widget.forecast?.forecastData['daily']['time'][i]);
       dailyWidgets.add(
         Container(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Text(widget.forecast?.forecastData['daily']['time'][i]),
+              Text('${date.month}/${date.day}'),
               getWeatherIcon(
                   widget.forecast?.forecastData['daily']['weather_code'][i],
                   iconSize: 32.0),
