@@ -55,14 +55,12 @@ class WeeklyTabState extends State<WeeklyTab> {
       }
       temperatureMax.add(FlSpot(i.toDouble(),
           widget.forecast?.forecastData['daily']['temperature_2m_max'][i]));
-      if (i == 0 ||
-          minY >
-              widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
+      if (minY >
+          widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
         minY = widget.forecast?.forecastData['daily']['temperature_2m_max'][i];
       }
-      if (i == 0 ||
-          maxY <
-              widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
+      if (maxY <
+          widget.forecast?.forecastData['daily']['temperature_2m_max'][i]) {
         maxY = widget.forecast?.forecastData['daily']['temperature_2m_max'][i];
       }
       dailyWidgets.add(
@@ -177,8 +175,14 @@ class WeeklyTabState extends State<WeeklyTab> {
                     maxX: 6.3,
                     borderData: FlBorderData(),
                     lineBarsData: [
-                      LineChartBarData(spots: temperatureMax),
-                      LineChartBarData(spots: temperatureMin),
+                      LineChartBarData(
+                        spots: temperatureMax,
+                        color: Colors.orange,
+                      ),
+                      LineChartBarData(
+                        spots: temperatureMin,
+                        color: Colors.blue,
+                      ),
                     ],
                   ),
                 ),
