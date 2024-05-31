@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- geolocator Section -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Required to detect location information when showing weather forecast at the position.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Required to detect location information when showing weather forecast at the position.</string>
+    <!-- End of the geolocator Section -->
 </dict>
 </plist>
