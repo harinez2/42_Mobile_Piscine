@@ -22,6 +22,7 @@ class TodayTab extends StatefulWidget {
 
 class TodayTabState extends State<TodayTab> {
   WeatherForecast? forecast;
+  final _scrolllController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -162,16 +163,15 @@ class TodayTabState extends State<TodayTab> {
                       LineChartBarData(spots: temperature),
                     ],
                   ),
-                  // swapAnimationDuration: Duration(milliseconds: 150),
-                  // swapAnimationCurve: Curves.linear,
                 ),
               ),
               const SizedBox(
                 height: 40,
               ),
               Scrollbar(
+                controller: _scrolllController,
                 child: SingleChildScrollView(
-                  primary: true,
+                  controller: _scrolllController,
                   scrollDirection: Axis.horizontal,
                   child: Row(children: hourlyWidgets),
                 ),

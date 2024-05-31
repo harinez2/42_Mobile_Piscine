@@ -21,6 +21,7 @@ class WeeklyTab extends StatefulWidget {
 
 class WeeklyTabState extends State<WeeklyTab> {
   WeatherForecast? forecast;
+  final _scrolllController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -202,8 +203,9 @@ class WeeklyTabState extends State<WeeklyTab> {
                 height: 40,
               ),
               Scrollbar(
+                controller: _scrolllController,
                 child: SingleChildScrollView(
-                  primary: true,
+                  controller: _scrolllController,
                   scrollDirection: Axis.horizontal,
                   child: Row(children: dailyWidgets),
                 ),

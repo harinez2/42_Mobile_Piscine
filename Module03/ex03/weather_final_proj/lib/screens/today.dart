@@ -22,6 +22,7 @@ class TodayTab extends StatefulWidget {
 
 class TodayTabState extends State<TodayTab> {
   WeatherForecast? forecast;
+  final _scrolllController = ScrollController();
 
   Future<WeatherForecast?> getForecast() async {
     try {
@@ -184,7 +185,9 @@ class TodayTabState extends State<TodayTab> {
                 height: 40,
               ),
               Scrollbar(
+                controller: _scrolllController,
                 child: SingleChildScrollView(
+                  controller: _scrolllController,
                   primary: true,
                   scrollDirection: Axis.horizontal,
                   child: Row(children: hourlyWidgets),
