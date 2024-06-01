@@ -265,10 +265,9 @@ class _CustomOptionsViewBuilder extends StatefulWidget {
   final Iterable<Map<String, dynamic>> options;
 
   const _CustomOptionsViewBuilder({
-    Key? key,
     required this.onSelected,
     required this.options,
-  }) : super(key: key);
+  });
 
   @override
   _CustomOptionsViewBuilderState createState() =>
