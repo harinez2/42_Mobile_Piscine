@@ -103,6 +103,7 @@ class MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
+        color: Colors.black,
         image: DecorationImage(
           image: AssetImage('images/background.jpg'),
           fit: BoxFit.cover,
@@ -110,14 +111,22 @@ class MainAppState extends State<MainApp> {
         ),
       ),
       child: MaterialApp(
-        theme: ThemeData(fontFamily: 'Noto Sans JP'),
+        themeMode: ThemeMode.dark,
+        theme: ThemeData(
+          fontFamily: 'Noto Sans JP',
+          textTheme: TextTheme(
+            bodyLarge: TextStyle(color: Colors.white.withOpacity(0.9)),
+            bodyMedium: TextStyle(color: Colors.white.withOpacity(0.9)),
+            bodySmall: TextStyle(color: Colors.white.withOpacity(0.9)),
+          ),
+        ),
         home: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             toolbarHeight: 80.0,
             // 左側のアイコン
-            leading: Icon(Icons.search, color: Colors.blueGrey.shade800),
+            leading: Icon(Icons.search, color: Colors.blueGrey.shade200),
             // タイトルテキスト
             title: Autocomplete<Map<String, dynamic>>(
               displayStringForOption: (e) =>
@@ -131,14 +140,14 @@ class MainAppState extends State<MainApp> {
                     border: InputBorder.none,
                     labelText: 'Search location...',
                     labelStyle: TextStyle(
-                      color: Colors.blueGrey.shade800,
+                      color: Colors.blueGrey.shade200,
                     ),
                     errorText: _networkError
                         ? 'Network error, please check the network connection.'
                         : null,
                   ),
                   style: TextStyle(
-                    color: Colors.blueGrey.shade800,
+                    color: Colors.blueGrey.shade200,
                   ),
                   onSubmitted: (value) async {
                     // 都市名入力してEnterを押した場合
@@ -198,7 +207,7 @@ class MainAppState extends State<MainApp> {
             // 右側のアイコン一覧
             actions: <Widget>[
               VerticalDivider(
-                color: Colors.blueGrey.shade800,
+                color: Colors.blueGrey.shade200,
                 thickness: 2,
                 indent: 10,
                 endIndent: 10,
@@ -231,7 +240,7 @@ class MainAppState extends State<MainApp> {
                 },
                 icon: Icon(
                   Icons.assistant_navigation,
-                  color: Colors.blueGrey.shade800,
+                  color: Colors.blueGrey.shade200,
                 ),
               ),
             ],
@@ -242,16 +251,29 @@ class MainAppState extends State<MainApp> {
             children: _widgetOptions,
           ),
           bottomNavigationBar: NavigationBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.blueGrey.shade300,
+            indicatorColor: Colors.blueGrey.shade800,
             selectedIndex: _selectedIndex,
             onDestinationSelected: _onDestinationSelected,
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
             destinations: const <NavigationDestination>[
               NavigationDestination(
-                  icon: Icon(Icons.settings), label: 'Currently'),
-              NavigationDestination(icon: Icon(Icons.event), label: 'Today'),
+                icon: Icon(
+                  Icons.settings,
+                ),
+                label: 'Currently',
+              ),
               NavigationDestination(
-                  icon: Icon(Icons.date_range), label: 'Weekly'),
+                  icon: Icon(
+                    Icons.event,
+                  ),
+                  label: 'Today'),
+              NavigationDestination(
+                icon: Icon(
+                  Icons.date_range,
+                ),
+                label: 'Weekly',
+              ),
             ],
           ),
         ),
