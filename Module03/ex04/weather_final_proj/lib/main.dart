@@ -340,6 +340,8 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
                     Future.delayed(const Duration(milliseconds: 100), () {
                       widget.onSelected(option);
                     });
+                    // キーボードを消す
+                    FocusScope.of(context).unfocus();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(16),
