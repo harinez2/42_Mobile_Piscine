@@ -105,7 +105,7 @@ class MainAppState extends State<MainApp> {
       decoration: const BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
-          image: AssetImage('images/background.jpg'),
+          image: AssetImage('assets/images/background.jpg'),
           fit: BoxFit.cover,
           opacity: 0.2,
         ),
@@ -347,7 +347,7 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
                         ? Colors.grey.withOpacity(0.3)
                         : option == hoveredOption
                             ? Colors.grey.withOpacity(0.1)
-                            : Colors.white,
+                            : Colors.white.withOpacity(0.8),
                     child: RichText(
                       text: TextSpan(
                         children: [
@@ -356,12 +356,14 @@ class _CustomOptionsViewBuilderState extends State<_CustomOptionsViewBuilder> {
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
+                              color: Colors.blueGrey,
                             ),
                           ),
                           TextSpan(
                             text: ", ${option['admin1']}, ${option['country']}",
                             style: const TextStyle(
                               fontSize: 16,
+                              color: Colors.blueGrey,
                             ),
                           ),
                         ],
