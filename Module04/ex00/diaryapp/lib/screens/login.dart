@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/my_firebase_auth.dart';
+import '../components/my_google_signin.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -13,8 +13,9 @@ class LoginPage extends StatelessWidget {
               const Text('Welcome to your diary'),
               const SizedBox(height: 30.0),
               ElevatedButton(
-                onPressed: () {
-                  MyFirebaseAuth.listenUserChanges();
+                onPressed: () async {
+                  // 認証
+                  await MyGoogleSignIn.signInWithGoogleWeb();
                 },
                 child: const Text('Login'),
               ),
