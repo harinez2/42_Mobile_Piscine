@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'components/my_firebase_auth.dart';
 import 'screens/home.dart';
 import 'screens/login.dart';
 
@@ -22,20 +21,34 @@ class MainApp extends StatefulWidget {
 }
 
 class MainAppState extends State<MainApp> {
-  MyFirebaseAuth myauth = MyFirebaseAuth();
+  User? currentUser;
 
   @override
   void initState() {
+    currentUser = FirebaseAuth.instance.currentUser;
     // 認証ステータスのリスナーを設定
-    MyFirebaseAuth.listenUserChanges();
+    listenUserChanges();
 
     super.initState();
   }
 
+  void listenUserChanges() {
+    FirebaseAuth.instance.userChanges().listen((User? user) async {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in! (user: ${user.uid})');
+      }
+      setState(() {
+        currentUser = FirebaseAuth.instance.currentUser;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      return HomePage(user: FirebaseAuth.instance.currentUser!);
+    if (currentUser != null) {
+      return HomePage(user: currentUser!);
     } else {
       return LoginPage();
     }
