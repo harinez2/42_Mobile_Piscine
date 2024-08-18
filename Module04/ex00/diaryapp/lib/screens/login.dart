@@ -13,9 +13,9 @@ class LoginPage extends StatelessWidget {
               const Text('Welcome to your diary'),
               const SizedBox(height: 30.0),
               ElevatedButton(
-                onPressed: () async {
+                onPressed: () {
                   // 認証
-                  await MyGoogleSignIn.signInWithGoogleWeb();
+                  MyGoogleSignIn.signInWithGoogleWeb();
                 },
                 child: const Text('Login'),
               ),

@@ -25,15 +25,15 @@ class MainAppState extends State<MainApp> {
 
   @override
   void initState() {
+    super.initState();
+
     currentUser = FirebaseAuth.instance.currentUser;
     // 認証ステータスのリスナーを設定
     listenUserChanges();
-
-    super.initState();
   }
 
   void listenUserChanges() {
-    FirebaseAuth.instance.userChanges().listen((User? user) async {
+    FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null) {
         print('User is currently signed out!');
       } else {

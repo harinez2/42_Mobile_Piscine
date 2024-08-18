@@ -34,6 +34,7 @@ class MyGoogleSignIn {
     return await FirebaseAuth.instance.signInWithPopup(googleProvider);
 
     // Or use signInWithRedirect
-    // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    // FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    // return await FirebaseAuth.instance.getRedirectResult();
   }
 }
