@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "62785662600",
+    "project_id": "piscine-mobile",
+    "storage_bucket": "piscine-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62785662600:android:31306a985b417c086df93d",
+        "android_client_info": {
+          "package_name": "com.example.diaryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62785662600-ua9n0fpm489t9gsnnsqbbuatc3i1oklj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": ""
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62785662600-ua9n0fpm489t9gsnnsqbbuatc3i1oklj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
