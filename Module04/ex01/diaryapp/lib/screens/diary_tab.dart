@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import '../components/my_firestore.dart';
 
 class DiaryTab extends StatefulWidget {
@@ -38,12 +39,31 @@ class DiaryTabState extends State<DiaryTab> {
             return Center(child: Text(snapshot.error.toString()));
           }
 
-          // データが0個のとき
+          // データがない/0個のとき
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Text("No entry.");
           }
-          
-          return Text(snapshot.data.toString());
+
+          return Column(
+            children: [
+              for (final cardData in snapshot.data!)
+                Card(
+                  child: ListTile(
+                    leading: Image.network('https://placehold.jp/50x50.png'),
+                    title: Text(cardData['title']),
+                    subtitle: Text(
+                      DateFormat("yyyy/MM/dd hh:mm:ss")
+                          .format(cardData['date'].toDate())
+                          .toString(),
+                      style:
+                          const TextStyle(fontSize: 16.0, color: Colors.black),
+                    ),
+                    trailing: Icon(IconData(cardData['icon'],
+                        fontFamily: 'MaterialIcons')),
+                  ),
+                ),
+            ],
+          );
         },
       ),
     );
