@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import '../components/my_firestore.dart';
 
@@ -66,12 +67,78 @@ class DiaryTabState extends State<DiaryTab> {
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => {},
+              onPressed: () => {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return _DiaryInputDialog();
+                  },
+                )
+              },
               child: const Icon(Icons.add),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class _DiaryInputDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> actions = [
+      TextButton(
+        child: const Text('Cancel'),
+        onPressed: () => Navigator.pop(context),
+      ),
+      ElevatedButton(
+        child: const Text('Add'),
+        onPressed: () => Navigator.pop(context),
+      ),
+    ];
+
+    return AlertDialog(
+      title: const Text("Add content"),
+      content: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            TextField(
+              controller: TextEditingController(),
+              decoration: InputDecoration(
+                labelText: 'title',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              autofocus: true,
+              keyboardType: TextInputType.text,
+            ),
+            const SizedBox(height: 4),
+            TextField(
+              controller: TextEditingController(),
+              decoration: InputDecoration(
+                labelText: 'body',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              autofocus: true,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              minLines: 6,
+            ),
+          ],
+        ),
+      ),
+      actions: actions,
     );
   }
 }
