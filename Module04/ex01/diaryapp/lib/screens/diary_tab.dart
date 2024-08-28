@@ -26,12 +26,24 @@ class DiaryTabState extends State<DiaryTab> {
     return Scaffold(
       body: FutureBuilder(
         future: _getEntryList(),
-        builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasData) {
-            return Text(snapshot.data.toString());
-          } else {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+          // 通信中はスピナーを表示
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // エラー時はエラーメッセージを表示
+          if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
+
+          // データが0個のとき
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Text("No entry.");
           }
+          
+          return Text(snapshot.data.toString());
         },
       ),
     );
