@@ -44,25 +44,31 @@ class DiaryTabState extends State<DiaryTab> {
             return const Text("No entry.");
           }
 
-          return Column(
-            children: [
-              for (final cardData in snapshot.data!)
-                Card(
-                  child: ListTile(
-                    leading: Image.network('https://placehold.jp/50x50.png'),
-                    title: Text(cardData['title']),
-                    subtitle: Text(
-                      DateFormat("yyyy/MM/dd hh:mm:ss")
-                          .format(cardData['date'].toDate())
-                          .toString(),
-                      style:
-                          const TextStyle(fontSize: 16.0, color: Colors.black),
+          return Scaffold(
+            body: Column(
+              children: [
+                for (final cardData in snapshot.data!)
+                  Card(
+                    child: ListTile(
+                      // leading: Image.network('https://placehold.jp/50x50.png'),
+                      title: Text(cardData['title']),
+                      subtitle: Text(
+                        DateFormat("yyyy/MM/dd hh:mm:ss")
+                            .format(cardData['date'].toDate())
+                            .toString(),
+                        style: const TextStyle(
+                            fontSize: 16.0, color: Colors.black),
+                      ),
+                      trailing: Icon(IconData(cardData['icon'],
+                          fontFamily: 'MaterialIcons')),
                     ),
-                    trailing: Icon(IconData(cardData['icon'],
-                        fontFamily: 'MaterialIcons')),
                   ),
-                ),
-            ],
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => {},
+              child: const Icon(Icons.add),
+            ),
           );
         },
       ),
