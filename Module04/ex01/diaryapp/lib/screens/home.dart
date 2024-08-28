@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../components/my_firestore.dart';
 import 'diary_tab.dart';
 import 'profile_tab.dart';
 
@@ -20,18 +19,14 @@ class HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
   late List<Widget> _widgetOptions;
-  final MyFirestore db = MyFirestore();
 
   @override
   void initState() {
     // タブの作成
     _widgetOptions = <Widget>[
       ProfileTab(user: widget.user),
-      const DiaryTab(),
+      DiaryTab(user: widget.user),
     ];
-
-    // エントリー一覧を読み込み
-    db.readEntryList();
 
     super.initState();
   }
