@@ -17,18 +17,23 @@ class DiaryTab extends StatefulWidget {
 class DiaryTabState extends State<DiaryTab> {
   final MyFirestore db = MyFirestore();
 
-  @override
-  void initState() {
-    // エントリー一覧を読み込み
-    db.readEntryList();
-
-    super.initState();
+  Future<List<Map<String, dynamic>>> _getEntryList() async {
+    return await db.readEntryList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text('DiaryTab'),
+    return Scaffold(
+      body: FutureBuilder(
+        future: _getEntryList(),
+        builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasData) {
+            return Text(snapshot.data.toString());
+          } else {
+            return const Text("No entry.");
+          }
+        },
+      ),
     );
   }
 }
