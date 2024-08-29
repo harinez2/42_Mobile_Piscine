@@ -62,15 +62,18 @@ class DiaryTabState extends State<DiaryTab> {
                         ),
                         trailing: Icon(IconData(cardData['icon'],
                             fontFamily: 'MaterialIcons')),
-                        onTap: () => showDialog(
-                          context: context,
-                          builder: (context) {
-                            return _DiaryShowContentsDialog(
-                              db: db,
-                              entry: cardData,
-                            );
-                          },
-                        ),
+                        onTap: () async {
+                          final bool? isRequiredRefresh = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return _DiaryShowContentsDialog(
+                                db: db,
+                                entry: cardData,
+                              );
+                            },
+                          );
+                          if (isRequiredRefresh == true) setState(() {});
+                        },
                       ),
                     ),
                 ],
@@ -78,14 +81,13 @@ class DiaryTabState extends State<DiaryTab> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                final bool isRequiredRefresh = await showDialog(
+                final bool? isRequiredRefresh = await showDialog(
                   context: context,
                   builder: (context) {
                     return _DiaryInputDialog(db: db);
                   },
                 );
-                print('isRequiredRefresh $isRequiredRefresh');
-                if (isRequiredRefresh) setState(() {});
+                if (isRequiredRefresh == true) setState(() {});
               },
               child: const Icon(Icons.add),
             ),
@@ -230,10 +232,10 @@ class _DiaryShowContentsDialog extends StatelessWidget {
                         actions: [
                           TextButton(
                               child: const Text('Yes'),
-                              onPressed: () {
-                                db.deleteEntry(entry['docId']);
+                              onPressed: () async {
+                                await db.deleteEntry(entry['docId']);
                                 Navigator.pop(context);
-                                Navigator.pop(context);
+                                Navigator.pop(context, true);
                               }),
                           TextButton(
                             child: const Text('No'),
