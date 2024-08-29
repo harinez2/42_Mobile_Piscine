@@ -46,25 +46,27 @@ class DiaryTabState extends State<DiaryTab> {
           }
 
           return Scaffold(
-            body: Column(
-              children: [
-                for (final cardData in snapshot.data!)
-                  Card(
-                    child: ListTile(
-                      // leading: Image.network('https://placehold.jp/50x50.png'),
-                      title: Text(cardData['title']),
-                      subtitle: Text(
-                        DateFormat("yyyy/MM/dd hh:mm:ss")
-                            .format(cardData['date'].toDate())
-                            .toString(),
-                        style: const TextStyle(
-                            fontSize: 16.0, color: Colors.black),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (final cardData in snapshot.data!)
+                    Card(
+                      child: ListTile(
+                        // leading: Image.network('https://placehold.jp/50x50.png'),
+                        title: Text(cardData['title']),
+                        subtitle: Text(
+                          DateFormat("yyyy/MM/dd hh:mm:ss")
+                              .format(cardData['date'].toDate())
+                              .toString(),
+                          style: const TextStyle(
+                              fontSize: 16.0, color: Colors.black),
+                        ),
+                        trailing: Icon(IconData(cardData['icon'],
+                            fontFamily: 'MaterialIcons')),
                       ),
-                      trailing: Icon(IconData(cardData['icon'],
-                          fontFamily: 'MaterialIcons')),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => {
@@ -99,15 +101,15 @@ class _DiaryInputDialog extends StatelessWidget {
     ];
 
     return AlertDialog(
-      title: const Text("Add content"),
-      content: Container(
-        width: double.infinity,
-        child: Column(
-          children: [
-            TextField(
+      title: const Text("Add an entry"),
+      content: Column(
+        children: [
+          SizedBox(
+            width: 400,
+            child: TextField(
               controller: TextEditingController(),
               decoration: InputDecoration(
-                labelText: 'title',
+                labelText: 'Title',
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
@@ -118,25 +120,25 @@ class _DiaryInputDialog extends StatelessWidget {
               autofocus: true,
               keyboardType: TextInputType.text,
             ),
-            const SizedBox(height: 4),
-            TextField(
-              controller: TextEditingController(),
-              decoration: InputDecoration(
-                labelText: 'body',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
+          ),
+          const SizedBox(height: 4),
+          TextField(
+            controller: TextEditingController(),
+            decoration: InputDecoration(
+              labelText: 'Text',
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
               ),
-              autofocus: true,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              minLines: 6,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
             ),
-          ],
-        ),
+            autofocus: true,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 6,
+          ),
+        ],
       ),
       actions: actions,
     );
