@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import '../components/my_firestore.dart';
 
@@ -73,7 +72,7 @@ class DiaryTabState extends State<DiaryTab> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return _DiaryInputDialog();
+                    return _DiaryInputDialog(db: db);
                   },
                 )
               },
@@ -87,8 +86,16 @@ class DiaryTabState extends State<DiaryTab> {
 }
 
 class _DiaryInputDialog extends StatelessWidget {
+  final MyFirestore db;
+
+  const _DiaryInputDialog({
+    required this.db,
+  });
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController ctrlrTitle = TextEditingController();
+    TextEditingController ctrlrText = TextEditingController();
     final List<Widget> actions = [
       TextButton(
         child: const Text('Cancel'),
@@ -96,7 +103,17 @@ class _DiaryInputDialog extends StatelessWidget {
       ),
       ElevatedButton(
         child: const Text('Add'),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () async {
+          await db.postNewEntry({
+            'date': DateTime.now(),
+            'icon': 58750,
+            'text': ctrlrText.text,
+            'title': ctrlrTitle.text,
+            'usermail': 'user@example.com',
+          });
+
+          // Navigator.pop(context);
+        },
       ),
     ];
 
@@ -107,7 +124,7 @@ class _DiaryInputDialog extends StatelessWidget {
           SizedBox(
             width: 400,
             child: TextField(
-              controller: TextEditingController(),
+              controller: ctrlrTitle,
               decoration: const InputDecoration(
                 labelText: 'Title',
                 enabledBorder: OutlineInputBorder(),
@@ -119,7 +136,7 @@ class _DiaryInputDialog extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           TextField(
-            controller: TextEditingController(),
+            controller: ctrlrText,
             decoration: const InputDecoration(
               labelText: 'Text',
               enabledBorder: OutlineInputBorder(),
