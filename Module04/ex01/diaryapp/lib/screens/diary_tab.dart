@@ -215,6 +215,36 @@ class _DiaryShowContentsDialog extends StatelessWidget {
             maxLines: null,
             minLines: 6,
           ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: const Text('Are you sure you want to delete this entry?'),
+                        actions: [
+                          TextButton(
+                              child: const Text('Yes'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }),
+                          TextButton(
+                            child: const Text('No'),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text('Delete this entry'),
+              ),
+            ],
+          )
         ],
       ),
       actions: actions,
