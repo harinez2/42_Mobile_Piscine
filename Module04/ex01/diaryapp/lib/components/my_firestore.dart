@@ -4,6 +4,7 @@ import 'app_constants.dart';
 class MyFirestore {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
+  // エントリー一覧を取得
   Future<List<Map<String, dynamic>>> readEntryList() async {
     List<Map<String, dynamic>> ret = [];
     await db
@@ -20,6 +21,7 @@ class MyFirestore {
     return ret;
   }
 
+  // 新エントリーを追加
   Future<String?> postNewEntry(Map<String, dynamic> newEntry) async {
     String? ret;
     await db
@@ -27,7 +29,7 @@ class MyFirestore {
         .add(newEntry)
         .then((DocumentReference doc) {
       ret = doc.id;
-      print('DocumentSnapshot added with ID: ${doc.id}');
+      print('New entry added with ID: ${doc.id}');
     });
 
     return ret;
