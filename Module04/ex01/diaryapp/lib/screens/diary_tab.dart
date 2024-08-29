@@ -77,13 +77,15 @@ class DiaryTabState extends State<DiaryTab> {
               ),
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => {
-                showDialog(
+              onPressed: () async {
+                final bool isRequiredRefresh = await showDialog(
                   context: context,
                   builder: (context) {
                     return _DiaryInputDialog(db: db);
                   },
-                )
+                );
+                print('isRequiredRefresh $isRequiredRefresh');
+                if (isRequiredRefresh) setState(() {});
               },
               child: const Icon(Icons.add),
             ),
@@ -108,19 +110,19 @@ class _DiaryInputDialog extends StatelessWidget {
     final List<Widget> actions = [
       TextButton(
         child: const Text('Cancel'),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => Navigator.pop(context, false),
       ),
       ElevatedButton(
         child: const Text('Add'),
-        onPressed: () {
-          db.postNewEntry({
+        onPressed: () async {
+          await db.postNewEntry({
             'date': DateTime.now(),
             'icon': 58750,
             'text': ctrlrText.text,
             'title': ctrlrTitle.text,
             'usermail': 'user@example.com',
           });
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         },
       ),
     ];
