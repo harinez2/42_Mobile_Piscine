@@ -62,6 +62,12 @@ class DiaryTabState extends State<DiaryTab> {
                         ),
                         trailing: Icon(IconData(cardData['icon'],
                             fontFamily: 'MaterialIcons')),
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (context) {
+                            return _DiaryShowContentsDialog(db: db);
+                          },
+                        ),
                       ),
                     ),
                 ],
@@ -119,6 +125,61 @@ class _DiaryInputDialog extends StatelessWidget {
 
     return AlertDialog(
       title: const Text("Add an entry"),
+      content: Column(
+        children: [
+          SizedBox(
+            width: 400,
+            child: TextField(
+              controller: ctrlrTitle,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(),
+              ),
+              autofocus: true,
+              keyboardType: TextInputType.text,
+            ),
+          ),
+          const SizedBox(height: 4),
+          TextField(
+            controller: ctrlrText,
+            decoration: const InputDecoration(
+              labelText: 'Text',
+              enabledBorder: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(),
+            ),
+            autofocus: true,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 6,
+          ),
+        ],
+      ),
+      actions: actions,
+    );
+  }
+}
+
+class _DiaryShowContentsDialog extends StatelessWidget {
+  final MyFirestore db;
+
+  const _DiaryShowContentsDialog({
+    required this.db,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController ctrlrTitle = TextEditingController();
+    TextEditingController ctrlrText = TextEditingController();
+    final List<Widget> actions = [
+      TextButton(
+        child: const Text('Close'),
+        onPressed: () => Navigator.pop(context),
+      ),
+    ];
+
+    return AlertDialog(
+      title: const Text("Entry"),
       content: Column(
         children: [
           SizedBox(
