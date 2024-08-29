@@ -66,8 +66,8 @@ class DiaryTabState extends State<DiaryTab> {
                           context: context,
                           builder: (context) {
                             return _DiaryShowContentsDialog(
-                              title: cardData['title'],
-                              text: cardData['text'],
+                              db: db,
+                              entry: cardData,
                             );
                           },
                         ),
@@ -112,16 +112,15 @@ class _DiaryInputDialog extends StatelessWidget {
       ),
       ElevatedButton(
         child: const Text('Add'),
-        onPressed: () async {
-          await db.postNewEntry({
+        onPressed: () {
+          db.postNewEntry({
             'date': DateTime.now(),
             'icon': 58750,
             'text': ctrlrText.text,
             'title': ctrlrTitle.text,
             'usermail': 'user@example.com',
           });
-
-          // Navigator.pop(context);
+          Navigator.pop(context);
         },
       ),
     ];
@@ -164,20 +163,20 @@ class _DiaryInputDialog extends StatelessWidget {
 }
 
 class _DiaryShowContentsDialog extends StatelessWidget {
-  final String title;
-  final String text;
+  final MyFirestore db;
+  final Map<String, dynamic> entry;
 
   const _DiaryShowContentsDialog({
-    required this.title,
-    required this.text,
+    required this.db,
+    required this.entry,
   });
 
   @override
   Widget build(BuildContext context) {
     TextEditingController ctrlrTitle = TextEditingController();
-    ctrlrTitle.text = title;
+    ctrlrTitle.text = entry['title'];
     TextEditingController ctrlrText = TextEditingController();
-    ctrlrText.text = text;
+    ctrlrText.text = entry['text'];
     final List<Widget> actions = [
       TextButton(
         child: const Text('Close'),
@@ -224,11 +223,13 @@ class _DiaryShowContentsDialog extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        content: const Text('Are you sure you want to delete this entry?'),
+                        content: const Text(
+                            'Are you sure you want to delete this entry?'),
                         actions: [
                           TextButton(
                               child: const Text('Yes'),
                               onPressed: () {
+                                db.deleteEntry(entry['docId']);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               }),

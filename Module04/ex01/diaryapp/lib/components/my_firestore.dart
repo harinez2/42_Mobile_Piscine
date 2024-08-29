@@ -29,9 +29,21 @@ class MyFirestore {
         .add(newEntry)
         .then((DocumentReference doc) {
       ret = doc.id;
-      print('New entry added with ID: ${doc.id}');
+      print('New entry added. (docId: ${doc.id})');
     });
 
     return ret;
+  }
+
+  // エントリーを削除
+  Future<void> deleteEntry(String docId) async {
+    await db
+        .collection(AppConstants.firebaseCollectionName)
+        .doc(docId)
+        .delete()
+        .then(
+          (doc) => print("Entry deleted. (docId: $docId)"),
+          onError: (e) => print("Error deleting entry. $e"),
+        );
   }
 }
