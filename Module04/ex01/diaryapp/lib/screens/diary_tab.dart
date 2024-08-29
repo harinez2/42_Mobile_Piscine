@@ -65,7 +65,10 @@ class DiaryTabState extends State<DiaryTab> {
                         onTap: () => showDialog(
                           context: context,
                           builder: (context) {
-                            return _DiaryShowContentsDialog(db: db);
+                            return _DiaryShowContentsDialog(
+                              title: cardData['title'],
+                              text: cardData['text'],
+                            );
                           },
                         ),
                       ),
@@ -161,16 +164,20 @@ class _DiaryInputDialog extends StatelessWidget {
 }
 
 class _DiaryShowContentsDialog extends StatelessWidget {
-  final MyFirestore db;
+  final String title;
+  final String text;
 
   const _DiaryShowContentsDialog({
-    required this.db,
+    required this.title,
+    required this.text,
   });
 
   @override
   Widget build(BuildContext context) {
     TextEditingController ctrlrTitle = TextEditingController();
+    ctrlrTitle.text = title;
     TextEditingController ctrlrText = TextEditingController();
+    ctrlrText.text = text;
     final List<Widget> actions = [
       TextButton(
         child: const Text('Close'),
