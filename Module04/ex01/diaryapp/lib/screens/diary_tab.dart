@@ -108,14 +108,10 @@ class _DiaryInputDialog extends StatelessWidget {
             width: 400,
             child: TextField(
               controller: TextEditingController(),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Title',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(),
               ),
               autofocus: true,
               keyboardType: TextInputType.text,
@@ -124,14 +120,10 @@ class _DiaryInputDialog extends StatelessWidget {
           const SizedBox(height: 4),
           TextField(
             controller: TextEditingController(),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Text',
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(0),
-              ),
+              enabledBorder: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(),
             ),
             autofocus: true,
             keyboardType: TextInputType.multiline,
