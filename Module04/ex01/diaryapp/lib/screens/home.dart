@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'diary_tab.dart';
-import 'profile_tab.dart';
+import 'tab_diary.dart';
+import 'tab_profile.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
