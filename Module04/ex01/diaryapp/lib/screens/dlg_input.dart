@@ -1,13 +1,16 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/my_firestore.dart';
 
 class InputDialog extends StatelessWidget {
   final MyFirestore db;
+  final User user;
 
   const InputDialog({
     super.key,
     required this.db,
+    required this.user,
   });
 
   @override
@@ -27,7 +30,7 @@ class InputDialog extends StatelessWidget {
             'icon': 58750,
             'text': ctrlrText.text,
             'title': ctrlrTitle.text,
-            'usermail': 'user@example.com',
+            'usermail': user.email,
           });
           Navigator.pop(context, true);
         },

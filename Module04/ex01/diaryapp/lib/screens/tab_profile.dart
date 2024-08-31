@@ -90,7 +90,7 @@ class ProfileTabState extends State<ProfileTab> {
                 final bool? isRequiredRefresh = await showDialog(
                   context: context,
                   builder: (context) {
-                    return InputDialog(db: db);
+                    return InputDialog(db: db, user: widget.user);
                   },
                 );
                 if (isRequiredRefresh == true) setState(() {});
