@@ -82,20 +82,25 @@ class ProfileTabState extends State<ProfileTab> {
                         },
                       ),
                     ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple[700],
+                      foregroundColor: Colors.purple[50],
+                    ),
+                    child: const Text('Add entry'),
+                    onPressed: () async {
+                      final bool? isRequiredRefresh = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return InputDialog(db: db, user: widget.user);
+                        },
+                      );
+                      if (isRequiredRefresh == true) setState(() {});
+                    },
+                  ),
                 ],
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                final bool? isRequiredRefresh = await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return InputDialog(db: db, user: widget.user);
-                  },
-                );
-                if (isRequiredRefresh == true) setState(() {});
-              },
-              child: const Icon(Icons.add),
             ),
           );
         },
