@@ -61,13 +61,15 @@ class InputDialogState extends State<InputDialog> {
             ),
           ),
           const SizedBox(height: 4),
-          Row(
+          Wrap(
             children: [
               ChoiceChip(
                 label: const Icon(
                   Icons.sentiment_very_satisfied,
                 ),
-                selected: _choiceIndex == Icons.sentiment_very_satisfied.toString(),
+                showCheckmark: false,
+                selected:
+                    _choiceIndex == Icons.sentiment_very_satisfied.toString(),
                 onSelected: (_) {
                   setState(() {
                     _choiceIndex = Icons.sentiment_very_satisfied.toString();
@@ -78,7 +80,9 @@ class InputDialogState extends State<InputDialog> {
                 label: const Icon(
                   Icons.sentiment_satisfied_alt,
                 ),
-                selected: _choiceIndex == Icons.sentiment_satisfied_alt.toString(),
+                showCheckmark: false,
+                selected:
+                    _choiceIndex == Icons.sentiment_satisfied_alt.toString(),
                 onSelected: (_) {
                   setState(() {
                     _choiceIndex = Icons.sentiment_satisfied_alt.toString();
@@ -89,6 +93,7 @@ class InputDialogState extends State<InputDialog> {
                 label: const Icon(
                   Icons.sentiment_neutral,
                 ),
+                showCheckmark: false,
                 selected: _choiceIndex == Icons.sentiment_neutral.toString(),
                 onSelected: (_) {
                   setState(() {
@@ -100,7 +105,9 @@ class InputDialogState extends State<InputDialog> {
                 label: const Icon(
                   Icons.sentiment_dissatisfied,
                 ),
-                selected: _choiceIndex == Icons.sentiment_dissatisfied.toString(),
+                showCheckmark: false,
+                selected:
+                    _choiceIndex == Icons.sentiment_dissatisfied.toString(),
                 onSelected: (_) {
                   setState(() {
                     _choiceIndex = Icons.sentiment_dissatisfied.toString();
@@ -111,7 +118,9 @@ class InputDialogState extends State<InputDialog> {
                 label: const Icon(
                   Icons.sentiment_very_dissatisfied,
                 ),
-                selected: _choiceIndex == Icons.sentiment_very_dissatisfied.toString(),
+                showCheckmark: false,
+                selected: _choiceIndex ==
+                    Icons.sentiment_very_dissatisfied.toString(),
                 onSelected: (_) {
                   setState(() {
                     _choiceIndex = Icons.sentiment_very_dissatisfied.toString();
