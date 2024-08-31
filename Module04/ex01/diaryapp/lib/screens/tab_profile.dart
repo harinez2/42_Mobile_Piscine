@@ -46,6 +46,10 @@ class ProfileTabState extends State<ProfileTab> {
             return const Text("No entry.");
           }
 
+          // 日付順にソート
+          snapshot.data!
+              .sort((a, b) => b['date'].toDate().compareTo(a['date'].toDate()));
+
           return Scaffold(
             body: SingleChildScrollView(
               child: Column(
