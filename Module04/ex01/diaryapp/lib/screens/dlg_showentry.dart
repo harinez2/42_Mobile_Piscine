@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../components/my_firestore.dart';
 
 class ShowEntryDialog extends StatelessWidget {
@@ -26,9 +26,17 @@ class ShowEntryDialog extends StatelessWidget {
     ];
 
     return AlertDialog(
-      title: const Text("Entry"),
+      title: Text(
+        DateFormat("yyyy/MM/dd hh:mm:ss")
+            .format(entry['date'].toDate())
+            .toString(),
+      ),
       content: Column(
         children: [
+          Row(children: [
+            const Text('My feeling: '),
+            Icon(IconData(entry['icon'], fontFamily: 'MaterialIcons')),
+          ]),
           SizedBox(
             width: 400,
             child: TextField(
