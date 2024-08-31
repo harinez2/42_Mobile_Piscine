@@ -1,9 +1,8 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/my_firestore.dart';
 
-class InputDialog extends StatelessWidget {
+class InputDialog extends StatefulWidget {
   final MyFirestore db;
   final User user;
 
@@ -12,6 +11,13 @@ class InputDialog extends StatelessWidget {
     required this.db,
     required this.user,
   });
+
+  @override
+  InputDialogState createState() => InputDialogState();
+}
+
+class InputDialogState extends State<InputDialog> {
+  String _choiceIndex = '';
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +31,12 @@ class InputDialog extends StatelessWidget {
       ElevatedButton(
         child: const Text('Add'),
         onPressed: () async {
-          await db.postNewEntry({
+          await widget.db.postNewEntry({
             'date': DateTime.now(),
             'icon': 58750,
             'text': ctrlrText.text,
             'title': ctrlrTitle.text,
-            'usermail': user.email,
+            'usermail': widget.user.email,
           });
           Navigator.pop(context, true);
         },
@@ -53,6 +59,66 @@ class InputDialog extends StatelessWidget {
               autofocus: true,
               keyboardType: TextInputType.text,
             ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              ChoiceChip(
+                label: const Icon(
+                  Icons.sentiment_very_satisfied,
+                ),
+                selected: _choiceIndex == Icons.sentiment_very_satisfied.toString(),
+                onSelected: (_) {
+                  setState(() {
+                    _choiceIndex = Icons.sentiment_very_satisfied.toString();
+                  });
+                },
+              ),
+              ChoiceChip(
+                label: const Icon(
+                  Icons.sentiment_satisfied_alt,
+                ),
+                selected: _choiceIndex == Icons.sentiment_satisfied_alt.toString(),
+                onSelected: (_) {
+                  setState(() {
+                    _choiceIndex = Icons.sentiment_satisfied_alt.toString();
+                  });
+                },
+              ),
+              ChoiceChip(
+                label: const Icon(
+                  Icons.sentiment_neutral,
+                ),
+                selected: _choiceIndex == Icons.sentiment_neutral.toString(),
+                onSelected: (_) {
+                  setState(() {
+                    _choiceIndex = Icons.sentiment_neutral.toString();
+                  });
+                },
+              ),
+              ChoiceChip(
+                label: const Icon(
+                  Icons.sentiment_dissatisfied,
+                ),
+                selected: _choiceIndex == Icons.sentiment_dissatisfied.toString(),
+                onSelected: (_) {
+                  setState(() {
+                    _choiceIndex = Icons.sentiment_dissatisfied.toString();
+                  });
+                },
+              ),
+              ChoiceChip(
+                label: const Icon(
+                  Icons.sentiment_very_dissatisfied,
+                ),
+                selected: _choiceIndex == Icons.sentiment_very_dissatisfied.toString(),
+                onSelected: (_) {
+                  setState(() {
+                    _choiceIndex = Icons.sentiment_very_dissatisfied.toString();
+                  });
+                },
+              ),
+            ],
           ),
           const SizedBox(height: 4),
           TextField(
