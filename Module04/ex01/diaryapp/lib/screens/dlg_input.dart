@@ -17,12 +17,12 @@ class InputDialog extends StatefulWidget {
 }
 
 class InputDialogState extends State<InputDialog> {
-  String _choiceIndex = '';
+  TextEditingController ctrlrTitle = TextEditingController();
+  TextEditingController ctrlrText = TextEditingController();
+  IconData _choicedIcon = Icons.sentiment_neutral;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController ctrlrTitle = TextEditingController();
-    TextEditingController ctrlrText = TextEditingController();
     final List<Widget> actions = [
       TextButton(
         child: const Text('Cancel'),
@@ -33,7 +33,7 @@ class InputDialogState extends State<InputDialog> {
         onPressed: () async {
           await widget.db.postNewEntry({
             'date': DateTime.now(),
-            'icon': 58750,
+            'icon': _choicedIcon.codePoint,
             'text': ctrlrText.text,
             'title': ctrlrTitle.text,
             'usermail': widget.user.email,
@@ -58,6 +58,7 @@ class InputDialogState extends State<InputDialog> {
               ),
               autofocus: true,
               keyboardType: TextInputType.text,
+              onChanged: (value) => ctrlrTitle.text = value,
             ),
           ),
           const SizedBox(height: 4),
@@ -68,11 +69,10 @@ class InputDialogState extends State<InputDialog> {
                   Icons.sentiment_very_satisfied,
                 ),
                 showCheckmark: false,
-                selected:
-                    _choiceIndex == Icons.sentiment_very_satisfied.toString(),
+                selected: _choicedIcon == Icons.sentiment_very_satisfied,
                 onSelected: (_) {
                   setState(() {
-                    _choiceIndex = Icons.sentiment_very_satisfied.toString();
+                    _choicedIcon = Icons.sentiment_very_satisfied;
                   });
                 },
               ),
@@ -81,11 +81,10 @@ class InputDialogState extends State<InputDialog> {
                   Icons.sentiment_satisfied_alt,
                 ),
                 showCheckmark: false,
-                selected:
-                    _choiceIndex == Icons.sentiment_satisfied_alt.toString(),
+                selected: _choicedIcon == Icons.sentiment_satisfied_alt,
                 onSelected: (_) {
                   setState(() {
-                    _choiceIndex = Icons.sentiment_satisfied_alt.toString();
+                    _choicedIcon = Icons.sentiment_satisfied_alt;
                   });
                 },
               ),
@@ -94,10 +93,10 @@ class InputDialogState extends State<InputDialog> {
                   Icons.sentiment_neutral,
                 ),
                 showCheckmark: false,
-                selected: _choiceIndex == Icons.sentiment_neutral.toString(),
+                selected: _choicedIcon == Icons.sentiment_neutral,
                 onSelected: (_) {
                   setState(() {
-                    _choiceIndex = Icons.sentiment_neutral.toString();
+                    _choicedIcon = Icons.sentiment_neutral;
                   });
                 },
               ),
@@ -106,11 +105,10 @@ class InputDialogState extends State<InputDialog> {
                   Icons.sentiment_dissatisfied,
                 ),
                 showCheckmark: false,
-                selected:
-                    _choiceIndex == Icons.sentiment_dissatisfied.toString(),
+                selected: _choicedIcon == Icons.sentiment_dissatisfied,
                 onSelected: (_) {
                   setState(() {
-                    _choiceIndex = Icons.sentiment_dissatisfied.toString();
+                    _choicedIcon = Icons.sentiment_dissatisfied;
                   });
                 },
               ),
@@ -119,11 +117,10 @@ class InputDialogState extends State<InputDialog> {
                   Icons.sentiment_very_dissatisfied,
                 ),
                 showCheckmark: false,
-                selected: _choiceIndex ==
-                    Icons.sentiment_very_dissatisfied.toString(),
+                selected: _choicedIcon == Icons.sentiment_very_dissatisfied,
                 onSelected: (_) {
                   setState(() {
-                    _choiceIndex = Icons.sentiment_very_dissatisfied.toString();
+                    _choicedIcon = Icons.sentiment_very_dissatisfied;
                   });
                 },
               ),
@@ -137,10 +134,10 @@ class InputDialogState extends State<InputDialog> {
               enabledBorder: OutlineInputBorder(),
               focusedBorder: OutlineInputBorder(),
             ),
-            autofocus: true,
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 6,
+            onChanged: (value) => ctrlrText.text = value,
           ),
         ],
       ),
