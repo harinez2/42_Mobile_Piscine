@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import '../components/my_firestore.dart';
 
-class DiaryInputDialog extends StatelessWidget {
+class InputDialog extends StatelessWidget {
   final MyFirestore db;
 
-  const DiaryInputDialog({
+  const InputDialog({
     super.key,
     required this.db,
   });

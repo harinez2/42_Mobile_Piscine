@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import '../components/my_firestore.dart';
 
-class DiaryShowEntryDialog extends StatelessWidget {
+class ShowEntryDialog extends StatelessWidget {
   final MyFirestore db;
   final Map<String, dynamic> entry;
 
-  const DiaryShowEntryDialog({
+  const ShowEntryDialog({
     super.key,
     required this.db,
     required this.entry,
