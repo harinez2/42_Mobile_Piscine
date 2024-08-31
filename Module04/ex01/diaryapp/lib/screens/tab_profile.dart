@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import '../components/my_firestore.dart';
-import 'dlg_inputdlg.dart';
+import 'dlg_input.dart';
 import 'dlg_showentry.dart';
 
 class ProfileTab extends StatefulWidget {
