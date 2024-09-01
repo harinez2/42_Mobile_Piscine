@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import '../components/my_firestore.dart';
 
@@ -26,44 +27,53 @@ class ShowEntryDialog extends StatelessWidget {
     ];
 
     return AlertDialog(
-      title: Text(
-        DateFormat("yyyy/MM/dd hh:mm:ss")
-            .format(entry['date'].toDate())
-            .toString(),
+      title: TextField(
+        controller: ctrlrTitle,
+        readOnly: true,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+          ),
+        ),
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       content: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                DateFormat("yyyy/MM/dd hh:mm:ss")
+                    .format(entry['date'].toDate())
+                    .toString(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20, width: 400),
           Row(children: [
             const Text('My feeling: '),
             Icon(IconData(entry['icon'], fontFamily: 'MaterialIcons')),
           ]),
-          SizedBox(
-            width: 400,
-            child: TextField(
-              controller: ctrlrTitle,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(),
-              ),
-              autofocus: true,
-              keyboardType: TextInputType.text,
-            ),
-          ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 20),
           TextField(
             controller: ctrlrText,
-            decoration: const InputDecoration(
-              labelText: 'Text',
-              enabledBorder: OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(),
+            decoration: InputDecoration(
+              fillColor: Colors.purple[100],
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide.none,
+              ),
             ),
-            autofocus: true,
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 6,
+            readOnly: true,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 20),
           Row(
             children: [
               TextButton(
