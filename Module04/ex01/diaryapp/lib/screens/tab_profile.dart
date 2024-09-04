@@ -41,9 +41,9 @@ class ProfileTabState extends State<ProfileTab> {
             return Center(child: Text(snapshot.error.toString()));
           }
 
-          // データがない/0個のとき
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text("No entry.");
+          // データがないとき
+          if (!snapshot.hasData) {
+            return const Text("No data in the database.");
           }
 
           // 日付順にソート
@@ -54,6 +54,7 @@ class ProfileTabState extends State<ProfileTab> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
+                  if (snapshot.data!.isEmpty) const Text('No entry.'),
                   for (final cardData in snapshot.data!)
                     Card(
                       child: ListTile(
