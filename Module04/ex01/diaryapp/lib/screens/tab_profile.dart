@@ -54,7 +54,8 @@ class ProfileTabState extends State<ProfileTab> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (snapshot.data!.isEmpty) const Text('No entry.'),
+                  if (snapshot.data!.isEmpty)
+                    Center(child: const Text('No entry.')),
                   for (final cardData in snapshot.data!)
                     Card(
                       child: ListTile(
